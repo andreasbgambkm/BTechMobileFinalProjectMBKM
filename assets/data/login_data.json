@@ -1,0 +1,22 @@
+{
+  "login": [
+    {
+      "username": "admin",
+      "password": "admin123",
+      "user": {
+        "name": "Riyan",
+        "position": "Mandor Panen",
+        "division": "Divisi-2"
+      }
+    },
+    {
+      "username": "admin2",
+      "password": "admin123",
+      "user": {
+        "name": "Andreas",
+        "position": "Mandor Panen",
+        "division": "Divisi-1"
+      }
+    }
+  ]
+}

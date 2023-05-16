@@ -9,7 +9,7 @@ class BgaButton extends StatelessWidget {
   final Color? backgroundColor;
   final Color? textColor;
 
-  BgaButton({
+  const BgaButton({super.key,
     required this.text,
     required this.onPressed,
     this.icon,
@@ -20,21 +20,10 @@ class BgaButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 348,
+      width: double.maxFinite,
       height: 50,
       child: ElevatedButton(
         onPressed: onPressed,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            if (icon != null) Icon(icon),
-            SizedBox(width: 8),
-            Text(
-              text,
-              style:  TextStyle(fontSize: 14, fontFamily: 'Poppins'),
-            ),
-          ],
-        ),
         style: ButtonStyle(
           foregroundColor: MaterialStateProperty.all<Color>(
               textColor ?? BgaColor.bgaWhiteA700),
@@ -46,9 +35,18 @@ class BgaButton extends StatelessWidget {
                 borderRadius: BorderRadius.circular(15),
                 side:  BorderSide(color: BgaColor.bgaOrange, width: 2)
 
-
             ),
           ),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            if (icon != null) Icon(icon),
+            const SizedBox(width: 8),
+            Text(
+              text, style:  const TextStyle(fontSize: 14, fontFamily: 'Poppins'),
+            ),
+          ],
         ),
       ),
     );

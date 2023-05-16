@@ -2,6 +2,7 @@ library bubble_bottom_bar;
 
 import 'dart:math' as math;
 
+import 'package:BTechApp_Final_Project/core/utils/color_pallete.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:badges/badges.dart' as badges;
@@ -492,5 +493,61 @@ class _BubbleBottomBarClipper extends CustomClipper<Path> {
         oldClipper.notchMargin != notchMargin;
   }
 }
+
+
+class BgaBubbleBottomNavigation extends StatelessWidget {
+  final int currentIndex;
+  final Function(int?) onTap;
+
+  BgaBubbleBottomNavigation({
+    required this.currentIndex,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return BubbleBottomBar(
+      hasNotch: true,
+      fabLocation: BubbleBottomBarFabLocation.end,
+      opacity: .2,
+      currentIndex: currentIndex,
+      onTap: onTap,
+      borderRadius: BorderRadius.vertical(
+        top: Radius.circular(16),
+      ),
+      elevation: 8,
+      tilesPadding: EdgeInsets.symmetric(
+        vertical: 8.0,
+      ),
+      items: <BubbleBottomBarItem>[
+        BubbleBottomBarItem(
+          backgroundColor: BgaColor.bgaOrange,
+          icon: Icon(
+            Icons.home_filled,
+            color: BgaColor.bgaOrange,
+          ),
+          activeIcon: Icon(
+            Icons.home_filled,
+            color: BgaColor.bgaOrange,
+          ),
+          title: Text("Beranda"),
+        ),
+        BubbleBottomBarItem(
+          backgroundColor: BgaColor.bgaOrange,
+          icon: Icon(
+            Icons.dashboard,
+            color: BgaColor.bgaOrange,
+          ),
+          activeIcon: Icon(
+            Icons.dashboard,
+            color: BgaColor.bgaOrange,
+          ),
+          title: Text("Logs"),
+        ),
+      ],
+    );
+  }
+}
+
 
 

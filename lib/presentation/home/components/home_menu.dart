@@ -14,19 +14,19 @@ class HomeMenu extends StatelessWidget {
         children: <Widget> [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
+            children: const <Widget> [
               CustomCardMenu(
                 title: 'CheckIn',
                 counter: 100,
                 route: '/checkin_scan',
                ),
-              CustomCardMenu(title: 'CheckOut', counter: 15),
+              CustomCardMenu(title: 'CheckOut', counter: 15, route: '/coba_screen',),
             ],
           ),
 
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
+            children: const [
               CustomCardMenu(title: 'Asistensi Masuk', counter: 2),
               CustomCardMenu(title: 'Asistensi Keluar', counter: 4),
             ],

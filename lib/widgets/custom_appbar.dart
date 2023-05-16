@@ -1,5 +1,6 @@
 
 import 'package:BTechApp_Final_Project/core/utils/color_pallete.dart';
+import 'package:BTechApp_Final_Project/core/utils/theme/app_decoration.dart';
 import 'package:flutter/material.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -11,7 +12,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
 
-      title: Text(title),
+      title: Text(title, style: BgaTextStyle.appBarText,),
       centerTitle: true,
       backgroundColor: BgaColor.bgaOrange,
       elevation: 0,

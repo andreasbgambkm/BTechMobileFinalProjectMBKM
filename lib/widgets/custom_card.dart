@@ -2,6 +2,7 @@
 import 'package:BTechApp_Final_Project/core/utils/color_pallete.dart';
 import 'package:BTechApp_Final_Project/core/utils/theme/app_decoration.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 
 
@@ -210,7 +211,7 @@ class CustomCardMenu extends StatelessWidget {
         child: ListTile(
 
           title: Text(title,
-            style: BgaTextStyle.homeTitleBoldText,
+            style: BgaTextStyle.titleBoldText,
 
                 ),
 
@@ -320,3 +321,77 @@ class CustomCardCheck extends StatelessWidget {
   }
 }
 
+
+
+class CustomCardCheckIn extends StatelessWidget {
+  final String name;
+  final int isCheckedIn;
+  final VoidCallback onTap;
+  final String nik;
+
+  const CustomCardCheckIn({
+    required this.name,
+    required this.isCheckedIn,
+    required this.onTap,
+    required this.nik,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      borderOnForeground: true,
+      elevation: 2,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(18),
+      ),
+      child: ListTile(
+        title: Padding(
+          padding: const EdgeInsets.only(bottom: 8.0),
+          child: Row(
+            children: <Widget>[
+              Text(
+                name,
+                style: BgaTextStyle.titleBoldText,
+              ),
+              const Spacer(),
+              InkWell(
+                onTap: onTap,
+                child: Text(
+                  isCheckedIn.toString(),
+                  style: BgaTextStyle.subtitleText,
+                ),
+              ),
+            ],
+          ),
+        ),
+
+        subtitle: Padding(
+          padding: BgaPaddingSize.getPaddingNikInCheckIn(),
+          child: Row(
+            children: <Widget> [
+              Text(
+                "NIK  ",
+                style:BgaTextStyle.titleNormalText,
+              ),
+
+              Text(
+                  nik,
+                  style: BgaTextStyle.titleNormalText
+              ),
+              const Spacer(),
+              Text(
+                DateFormat('HH:mm').format(DateTime.now()).toString(),
+                style:  BgaTextStyle.subtitleBoldText,
+              ),
+
+            ],
+          ),
+        ),
+        onTap: () {
+
+        },
+      ),
+    );
+
+  }
+}

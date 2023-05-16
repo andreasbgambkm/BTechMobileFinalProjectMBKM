@@ -14,6 +14,10 @@ class BgaColor {
 
   static Color bgaGray400 = fromHex('#b3b3b3');
 
+  static Color bgaCheckinLabelGreenLight = fromHex('#E3FFD6');
+
+  static Color bgaCheckinLabelRedLight = fromHex('#FFE9E4');
+
   static Color bgaBlueGray400 = fromHex('#888888');
 
   static Color bgaGray800 = fromHex('#4e4e4e');

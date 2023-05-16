@@ -27,6 +27,7 @@ environment:
 # dependencies can be manually updated by changing the version numbers below to
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
+
 dependencies:
   flutter:
     sdk: flutter
@@ -46,6 +47,8 @@ dependencies:
   qr_code_scanner: ^1.0.1
   permission_handler: ^9.2.0
   easy_permission_validator: ^4.0.0
+  sqflite: ^2.2.8+1
+  vibration: ^1.7.7
 
 
 

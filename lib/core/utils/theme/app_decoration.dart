@@ -73,7 +73,7 @@ class BorderRadiusStyle {
   static BorderRadius roundedBorder5 = BorderRadius.circular(5
   );
 
-  static BorderRadius roundedBorder15 = BorderRadius.circular(15);
+  static BorderRadius bgaroundedBorder15 = BorderRadius.circular(15);
 
   static BorderRadius roundedBorder10 = BorderRadius.circular(10);
 
@@ -102,13 +102,6 @@ double get strokeAlignCenter => BorderSide.strokeAlignCenter;
 
 double get strokeAlignOutside => BorderSide.strokeAlignOutside;
 
-// For Flutter SDK Version 3.7.1 or less.
-
-// StrokeAlign get strokeAlignInside => StrokeAlign.inside;
-//
-// StrokeAlign get strokeAlignCenter => StrokeAlign.center;
-//
-// StrokeAlign get strokeAlignOutside => StrokeAlign.outside;
 
 class BgaTextStyle {
   static TextStyle loginTitleBold = TextStyle(
@@ -139,14 +132,36 @@ class BgaTextStyle {
     color: BgaColor.bgaOrange,
   );
 
-  static TextStyle homeTitleBoldText = TextStyle(
+  static TextStyle titleBoldText = TextStyle(
     fontSize: 14.0,
     fontWeight: FontWeight.bold,
     fontFamily: 'Poppins',
     color: BgaColor.bgaBlackTitleBold,
   );
-  static TextStyle homeSubtitleText = TextStyle(
+
+  static TextStyle titleNormalText = TextStyle(
+    fontSize: 14.0,
+    fontWeight: FontWeight.normal,
+    fontFamily: 'Poppins',
+    color: BgaColor.bgaBlackTitleBold,
+  );
+
+  static TextStyle subtitleText = TextStyle(
     fontSize: 12.0,
+    fontWeight: FontWeight.normal,
+    fontFamily: 'Poppins',
+    color: BgaColor.bgaBlack900,
+  );
+
+  static TextStyle subtitleBoldText = TextStyle(
+    fontSize: 12.0,
+    fontWeight: FontWeight.bold,
+    fontFamily: 'Poppins',
+    color: BgaColor.bgaBlack900,
+  );
+
+  static TextStyle subtitleText2 = TextStyle(
+    fontSize: 13.0,
     fontWeight: FontWeight.normal,
     fontFamily: 'Poppins',
     color: BgaColor.bgaBlack900,
@@ -165,9 +180,22 @@ class BgaTextStyle {
     fontFamily: 'Poppins',
     color: BgaColor.bgaOrange,
   );
+
+  static TextStyle searchBarText = TextStyle(
+    fontSize: 14.0,
+    fontWeight: FontWeight.normal,
+    fontFamily: 'Open Sans',
+    color: BgaColor.bgaBlackTitleBold,
+  );
+
+  static TextStyle appBarText = TextStyle(
+    fontSize: 14.0,
+    fontWeight: FontWeight.bold,
+    fontFamily: 'Poppins',
+    color: BgaColor.bgaWhiteA700,
+
+  );
 }
-
-
 
 class BgaPaddingSize {
   static const double bgaTopPadding = 18.0;
@@ -179,8 +207,13 @@ class BgaPaddingSize {
   static const double bgaLeftGpsCardPadding = 20.0;
   static const double bgaRightGpsCardPadding = 20.0;
   static const double bgaBottomGpsCardPadding= 11.0;
-  static const double bgaRowPaddingPadding= 11.0;
+  static const double bgaRowPadding= 11.0;
+  static const double bgaNikPaddingTop = 18.0;
+  static const double bgaNikPaddingBottom = 8.0;
 
+  static EdgeInsets getPaddingBottomSheetAll(){
+    return const EdgeInsets.all(16.0);
+  }
 
   static EdgeInsets getPaddingBody() {
     return const EdgeInsets.only(top: bgaTopPadding, left:bgaLeftPadding ,right: bgaRightPadding, bottom: bgaBottomPadding );
@@ -191,5 +224,59 @@ class BgaPaddingSize {
   static EdgeInsets getPaddingRkhCard() {
     return const EdgeInsets.only(top: bgaTopCardRkhPadding, bottom: bgaBottomPadding);
   }
+  static EdgeInsets getPaddingRowCounterPekerja() {
+    return const EdgeInsets.only(bottom:7.0);
+  }
+  static EdgeInsets getPaddingScanButton() {
+    return const EdgeInsets.only(top: 21.0, bottom: 43);
+  }
+  static EdgeInsets getPaddingSearchBarDaftarPekerja() {
+    return const EdgeInsets.only( bottom: 22);
+  }
+  static EdgeInsets getPaddingItemCard() {
+    return const EdgeInsets.only( bottom: 15);
+  }
+  static EdgeInsets getPaddingNikInCheckIn(){
+    return const EdgeInsets.only(top: bgaNikPaddingTop, bottom: bgaBottomPadding);
+  }
+  static EdgeInsets getBgaPaddingSymmetric20(){
+   return const EdgeInsets.symmetric(vertical: 20.0);
+  }
+  static EdgeInsets getBgaPaddingSymmHorizontal13(){
+    return const EdgeInsets.symmetric(vertical: 13.0);
+  }
+
 }
 
+class BgaIconSize{
+
+
+  static double getIconUserWidth() {
+    return 24.0;
+  }
+
+  static double getIconUserHeight() {
+    return 24.0;
+  }
+
+}
+
+class BgaSizedboxSize{
+  static double getSizedBoxLowHeight(){
+    return 5;
+  }
+
+  static double getSizedBoxMidHeight(){
+    return 10;
+  }
+
+
+  static double getSizedBoxMaxHeight(){
+    return 15;
+  }
+}
+class BgaHomeConfig {
+  static double getPaddingTopQuery(BuildContext context) {
+    return MediaQuery.of(context).padding.top / 2.5;
+  }
+}

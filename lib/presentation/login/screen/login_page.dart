@@ -1,6 +1,7 @@
 import 'package:BTechApp_Final_Project/core/utils/color_pallete.dart';
 import 'package:BTechApp_Final_Project/core/utils/theme/app_decoration.dart';
 import 'package:BTechApp_Final_Project/presentation/login/cubit/state.dart';
+import 'package:BTechApp_Final_Project/repository/EmployeeRepository.dart';
 import 'package:BTechApp_Final_Project/widgets/custom_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -132,7 +133,11 @@ class _LoginViewState extends State<LoginView> {
                               text: 'Login',
 
                               backgroundColor: BgaColor.bgaOrange,
-                              onPressed: () {
+                              onPressed: () async {
+
+                                await EmployeeRepository().open();
+
+
                                 final username = _usernameController.text;
                                 final password = _passwordController.text;
                               context.read<LoginCubit>().performLogin(username, password);

@@ -1,0 +1,35 @@
+[
+  {
+    "nik": "001",
+    "name": "Andreas",
+    "age": 30,
+    "position": "Manager",
+    "division": "divisi-1",
+    "kemandoran": "Kemandoran XYZ",
+    "isCheckedIn": 1,
+    "isCheckedOut": 0,
+    "checkin_time": "2022-05-11 08:00:00"
+  },
+  {
+    "nik": "002",
+    "name": "Riyan",
+    "age": 28,
+    "position": "Supervisor",
+    "division": "divisi-1",
+    "kemandoran": "Kemandoran XYZ",
+    "isCheckedIn": 0,
+    "isCheckedOut": 1,
+    "checkin_time": null
+  },
+  {
+    "nik": "003",
+    "name": "Siapa Saja",
+    "age": 35,
+    "position": "Developer",
+    "division": "divisi-1",
+    "kemandoran": "Kemandoran XYZ",
+    "isCheckedIn": 0,
+    "isCheckedOut": 0,
+    "checkin_time" : null
+  }
+]

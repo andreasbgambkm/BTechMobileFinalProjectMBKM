@@ -1,6 +1,7 @@
 
 import 'package:BTechApp_Final_Project/core/utils/color_pallete.dart';
 import 'package:BTechApp_Final_Project/data/login_data.dart';
+import 'package:BTechApp_Final_Project/repository/EmployeeRepository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -121,6 +122,8 @@ class BgaDrawer extends StatelessWidget {
                     ),
                           child: Text('Logout', selectionColor: BgaColor.bgaOrange,style: TextStyle(fontFamily: 'Poppins', color: BgaColor.bgaWhiteA700),),
                           onPressed: () async {
+
+                            await EmployeeRepository().deleteAll();
 
                             Navigator.pushNamedAndRemoveUntil(
                               context, '/login', (route) => false,

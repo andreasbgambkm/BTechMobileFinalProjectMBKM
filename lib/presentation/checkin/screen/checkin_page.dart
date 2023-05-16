@@ -1,10 +1,11 @@
-
-
 import 'package:BTechApp_Final_Project/core/utils/color_pallete.dart';
 import 'package:BTechApp_Final_Project/core/utils/theme/app_decoration.dart';
-import 'package:BTechApp_Final_Project/models/checkin_model.dart';
+import 'package:BTechApp_Final_Project/models/employee_model.dart';
+import 'package:BTechApp_Final_Project/repository/EmployeeRepository.dart';
 import 'package:BTechApp_Final_Project/widgets/custom_appbar.dart';
 import 'package:BTechApp_Final_Project/widgets/custom_button.dart';
+import 'package:BTechApp_Final_Project/widgets/custom_card.dart';
+import 'package:BTechApp_Final_Project/widgets/custom_searchbar.dart';
 import 'package:easy_permission_validator/easy_permission_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:icons_flutter/icons_flutter.dart';
@@ -16,9 +17,7 @@ class CheckInPage extends StatefulWidget {
   final String? title;
   final List<String>? items;
 
-
-
-   CheckInPage({Key? key, this.title, this.items})
+  const  CheckInPage({Key? key, this.title, this.items})
       : super(key: key);
 
 
@@ -29,41 +28,45 @@ class CheckInPage extends StatefulWidget {
 class _CheckInPageState extends State<CheckInPage> {
   String _result = '';
 
+  List<Employee> checkInList =[];
+  final EmployeeRepository repository = EmployeeRepository();
+  int checkInCount = 0;
+
+  Future<void> getAllCheckInModels() async {
+    final list = await repository.getAllCheckInModels();
+    setState(() {
+      checkInList = list;
+      checkInCount = checkInList.length;
+
+    });
+    updateList("");
+  }
 
   @override
   void initState() {
     super.initState();
-
+    getAllCheckInModels();
 
   }
 
-  int checkInCount = main_checkin_list.length;
-
-  static List<CheckInModel> main_checkin_list =[
-
-   CheckInModel("Abdan Ma'ruf", '36112005', DateTime.now(), '', 'CheckIn'),
-    CheckInModel("Andreas Magang BGA", '36112006', DateTime.now(), '', 'CheckIn'),
-    CheckInModel("Ciko Jeriko", '36112007', DateTime.now(), '', 'CheckIn'),
-    CheckInModel("Pak Alan", '36112008', DateTime.now(), '', 'CheckIn'),
-    CheckInModel("Zahra Magang BGA", '36112005', DateTime.now(), '', 'CheckIn'),
-    CheckInModel("Riyan Magang BGA", '36112006', DateTime.now(), '', 'CheckIn'),
-    CheckInModel("Abdan Ma'ruf", '36112005', DateTime.now(), '', 'CheckIn'),
-    CheckInModel("Andreas Magang BGA", '36112006', DateTime.now(), '', 'CheckIn'),
-    CheckInModel("Ciko Jeriko", '36112007', DateTime.now(), '', 'CheckIn'),
-    CheckInModel("Pak Alan", '36112008', DateTime.now(), '', 'CheckIn'),
-    CheckInModel("Zahra Magang BGA", '36112005', DateTime.now(), '', 'CheckIn'),
-    CheckInModel("Riyan Magang BGA", '36112006', DateTime.now(), '', 'CheckIn'),
-    CheckInModel("Erik  BGA", '36112019', DateTime.now(), '', 'CheckIn'),
 
 
-  ];
+  EmployeeRepository _employeeRepository = EmployeeRepository();
 
-  List<CheckInModel> display_list = List.from(main_checkin_list);
-  void updateList(String value){
+
+  updateList(String value) async {
+    final list = await repository.getAllCheckInModels();
     setState(() {
-      display_list = main_checkin_list.where((element) => element.name.toLowerCase().contains(value.toLowerCase()) ||  element.nik.toLowerCase().contains(value.toLowerCase())).toList() ;
+      if (value.isEmpty) {
+        // Jika value kosong, tampilkan semua item
+        checkInList = list;
+      } else {
+        // Jika value tidak kosong, filter item berdasarkan kondisi
+        checkInList = list.where((element) => element.name.toLowerCase().contains(value.toLowerCase()) ||
+            element.nik.toLowerCase().contains(value.toLowerCase())).toList();
+      }
+      checkInCount = checkInList.length; // tambahkan pembaruan jumlah item di sini
     });
-
   }
 
 
@@ -81,6 +84,7 @@ class _CheckInPageState extends State<CheckInPage> {
   @override
   Widget build(BuildContext context) {
     final String routeName = "/checkin_scanner";
+
     return Scaffold(
       backgroundColor: BgaColor.bgaBodyColor,
       appBar: CustomAppBar(title: 'Daftar Pekerja'),
@@ -95,134 +99,95 @@ class _CheckInPageState extends State<CheckInPage> {
                  textColor: BgaColor.bgaOrange,
               onPressed: () {
               Navigator.pushNamed(context, routeName);
-
               },
             ),
 
-
-           const SizedBox(height: 20.0,),
+            SizedBox(height: BgaSizedboxSize.getSizedBoxMaxHeight(),),
 
             Padding(
-              padding: const EdgeInsets.only(top: 10, bottom: 10),
+              padding: BgaPaddingSize.getPaddingRowCounterPekerja(),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget> [
-                  Text("$checkInCount Orang Pekerja"
-                  , style: const TextStyle(
-                      fontFamily: 'Poppins',
-                      fontWeight: FontWeight.bold,
-                      fontSize: 12,
-
-                    ),),
+                  Text("$checkInCount Orang Pekerja", style: BgaTextStyle.titleBoldText),
                 ],
               ),
             ),
+            
+            BgaCustomSearchBar(onChanged: (value){updateList(value);}),
 
-            TextField(
-              onChanged: (value) => updateList(value),
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: BgaColor.bgaSearchBarColor,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15.0),
-                  borderSide: BorderSide.none
-                ),
-                hintText: 'Siapa Yang Anda Cari?',
-                prefixIcon: Icon(FlutterIcons.search1_ant),
-                prefixIconColor: BgaColor.bgaGray200,
-              ),
-
-            ),
-            SizedBox(height: 20.0,),
+            SizedBox(height: BgaSizedboxSize.getSizedBoxMaxHeight(),),
 
             Expanded(
               child: ListView.builder(
-                itemCount: display_list.length,
+                itemCount: checkInCount,
                 itemBuilder: (context, index) {
-                  return Card(
-                    borderOnForeground: true,
-                    elevation: 2,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(18),
-                    ),
-                    child: ListTile(
-                      title: Padding(
-                        padding: const EdgeInsets.only(bottom: 8.0),
-                        child: Row(
-                          children: <Widget>[
-                            Text(
-                             display_list[index].name,
-                              style: const TextStyle(
-                                  fontFamily: 'Poppins',
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            const Spacer(),
-                            InkWell(
-                              onTap: () {
-                                // aksi yang akan dilakukan ketika teks di klik
-                              },
-                              child: Text(
-                                display_list[index].label,
-                                style: TextStyle(
 
-                                  color: BgaColor.bgaBlack90001,
-                                  fontSize: 12,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-
-                      subtitle: Padding(
-                        padding: const EdgeInsets.only(top: 18.0, bottom: 8),
-                        child: Row(
-                          children: <Widget> [
-                            const Text(
-                            "NIK  ",
-                              style: TextStyle(
-                                  fontFamily: 'Poppins',
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.normal),
-                            ),
-
-                            Text(
-                              display_list[index].nik,
-                              style: const TextStyle(
-                                  fontFamily: 'Poppins',
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.normal),
-                            ),
-                            const Spacer(),
-                            Text(
-                              DateFormat('HH:mm').format(display_list[index].checkin_time!).toString(),
-
-                              style:  TextStyle(
-                                  backgroundColor: BgaColor.bgaLightGreenList,
-                                  fontFamily: 'Poppins',
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.bold),
-                            ),
-
-
-                          ],
-                        ),
-                      ),
-                      onTap: () {
-
-                      },
-                    ),
-                  );
+                  return CustomCardCheckIn(name:  checkInList[index].name, isCheckedIn: checkInList[index].isCheckedIn, onTap: (){}, nik: checkInList[index].nik,);
+                  // return Card(
+                  //   borderOnForeground: true,
+                  //   elevation: 2,
+                  //   shape: RoundedRectangleBorder(
+                  //     borderRadius: BorderRadius.circular(18),
+                  //   ),
+                  //   child: ListTile(
+                  //     title: Padding(
+                  //       padding: const EdgeInsets.only(bottom: 8.0),
+                  //       child: Row(
+                  //         children: <Widget>[
+                  //           Text(
+                  //            checkInList[index].name,
+                  //             style:BgaTextStyle.titleBoldText) ,
+                  //           const Spacer(),
+                  //           InkWell(
+                  //             onTap: () {
+                  //               // aksi yang akan dilakukan ketika teks di klik
+                  //             },
+                  //             child: Text(
+                  //               checkInList[index].isCheckedIn.toString(),
+                  //               style: BgaTextStyle.subtitleText
+                  //             ),
+                  //           ),
+                  //         ],
+                  //       ),
+                  //     ),
+                  //
+                  //     subtitle: Padding(
+                  //       padding: BgaPaddingSize.getPaddingNikInCheckIn(),
+                  //       child: Row(
+                  //         children: <Widget> [
+                  //            Text(
+                  //           "NIK  ",
+                  //             style:BgaTextStyle.titleNormalText,
+                  //           ),
+                  //
+                  //           Text(
+                  //             checkInList[index].nik,
+                  //             style: BgaTextStyle.titleNormalText
+                  //           ),
+                  //           const Spacer(),
+                  //           Text(
+                  //             DateFormat('HH:mm').format(DateTime.now()).toString(),
+                  //             style:  BgaTextStyle.subtitleBoldText,
+                  //           ),
+                  //
+                  //         ],
+                  //       ),
+                  //     ),
+                  //     onTap: () {
+                  //
+                  //     },
+                  //   ),
+                  // );
                 },
               ),
             ),
 
-           const  SizedBox(height: 10,),
+           SizedBox(height: BgaSizedboxSize.getSizedBoxMidHeight(),),
 
             BgaButton(text: 'Cetak',
 
-                onPressed:(){
+                onPressed:() {
 
             })
           ],
@@ -267,22 +232,22 @@ class _MyAmazingCustomPopupState extends State<MyAmazingCustomPopup> {
       onWillPop: () async => false,
       child: Center(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 13.0),
+          padding: BgaPaddingSize.getBgaPaddingSymmHorizontal13(),
           child: SizedBox(
             height: 300.0,
             width: MediaQuery.of(context).size.width,
             child: Card(
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                borderRadius: BorderRadiusStyle.bgaroundedBorder15,
               ),
               color: Colors.white,
               child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 20.0),
+                padding: BgaPaddingSize.getBgaPaddingSymmetric20(),
                 child: Column(
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Text(
+                    const Text(
                       'Easy Permission Validator Demo',
                       style: TextStyle(
                         color: Colors.green,
@@ -290,7 +255,7 @@ class _MyAmazingCustomPopupState extends State<MyAmazingCustomPopup> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    Icon(
+                   const  Icon(
                       Icons.perm_camera_mic,
                       size: 60.0,
                       color: Colors.red,
@@ -302,7 +267,7 @@ class _MyAmazingCustomPopupState extends State<MyAmazingCustomPopup> {
                         ElevatedButton.icon(
                           onPressed: () => _closePopup(),
                           icon: Icon(Icons.cancel),
-                          label: Text('Cancel'),
+                          label: const Text('Cancel'),
                         ),
                         ElevatedButton.icon(
                           onPressed: () => _openPermissionSettings(),

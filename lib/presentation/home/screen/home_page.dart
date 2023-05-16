@@ -1,13 +1,13 @@
+import 'package:BTechApp_Final_Project/core/utils/constant.dart';
 import 'package:BTechApp_Final_Project/data/login_data.dart';
+import 'package:BTechApp_Final_Project/repository/EmployeeRepository.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:BTechApp_Final_Project/core/utils/theme/app_decoration.dart';
-import 'cubit.dart';
+
 import 'package:BTechApp_Final_Project/widgets/custom_icon.dart';
 import 'package:BTechApp_Final_Project/widgets/custom_drawer.dart';
 import 'package:BTechApp_Final_Project/widgets/custom_bottom_navigation.dart';
-import 'package:BTechApp_Final_Project/widgets/custom_appbar.dart';
 import 'package:BTechApp_Final_Project/core/utils/color_pallete.dart';
 import 'package:BTechApp_Final_Project/presentation/home/components/home_rkh.dart';
 import 'package:BTechApp_Final_Project/presentation/home/components/home_gps.dart';
@@ -17,7 +17,7 @@ import 'package:BTechApp_Final_Project/presentation/home/components/home_tasks.d
 class HomePage extends StatelessWidget {
   static String routeName = "/home";
   final User user;
-  late int currentIndex;
+  int? currentIndex;
   String greeting = '';
 
    HomePage({Key? key, required this.user}) : super(key: key);
@@ -52,7 +52,7 @@ class HomePage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
                     SizedBox(
-                      height: MediaQuery.of(context).padding.top/2.5,
+                      height: BgaHomeConfig.getPaddingTopQuery(context),
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -64,25 +64,19 @@ class HomePage extends StatelessWidget {
                               "$greeting, ${user.name}!",
                               overflow: TextOverflow.ellipsis,
                               textAlign: TextAlign.left,
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 14,
-                              ),
+                              style: BgaTextStyle.titleBoldText,
                             ),
                             SizedBox(
-                              height: 5,
+                              height: BgaSizedboxSize.getSizedBoxLowHeight(),
                             ),
                             Text(
                               '${user.position}, ${user.division}',
                               overflow: TextOverflow.ellipsis,
                               textAlign: TextAlign.left,
-                              style: TextStyle(
-                                fontWeight: FontWeight.normal,
-                                fontSize: 13,
-                              ),
+                              style: BgaTextStyle.subtitleText2,
                             ),
                             SizedBox(
-                              height: 15,
+                              height: BgaSizedboxSize.getSizedBoxMaxHeight(),
                             ),
                           ],
                         ),
@@ -97,11 +91,13 @@ class HomePage extends StatelessWidget {
                               ),
                               child: IconButton(
                                 icon: CustomIcon(
-                                  iconPath: 'assets/images/userdrawer.png',
-                                  width: 24,
-                                  height: 24,
+                                  iconPath: userDrawerIcon,
+                                  width: BgaIconSize.getIconUserWidth(),
+                                  height: BgaIconSize.getIconUserHeight(),
                                 ),
-                                onPressed: () {Scaffold.of(context).openDrawer();
+                                onPressed: () async {
+                                  await EmployeeRepository().injectFromJson();
+                                  Scaffold.of(context).openDrawer();
                                 },
                               ),
                             ),
@@ -109,7 +105,7 @@ class HomePage extends StatelessWidget {
                         ),
                       ],
                     ),
-                    SizedBox(height: 10,),
+                    SizedBox(height: BgaSizedboxSize.getSizedBoxMaxHeight(),),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: <Widget>[
@@ -117,19 +113,15 @@ class HomePage extends StatelessWidget {
                           formattedDate,
                           overflow: TextOverflow.ellipsis,
                           textAlign: TextAlign.left,
-                          style: TextStyle(
-                            fontWeight: FontWeight.normal,
-                            fontSize: 13,
-                            color: BgaColor.bgaBlack90001,
-                          ),
+                          style: BgaTextStyle.subtitleText,
                         ),
                       ],
                     ),
                     SizedBox(height: 10,),
-                    HomeGps(),
-                    HomeRkh(),
+                    const HomeGps(),
+                    const HomeRkh(),
                     HomeMenu(),
-                    HomeTasks(),
+                    const HomeTasks(),
                   ],
                 ),
               ),
@@ -138,48 +130,9 @@ class HomePage extends StatelessWidget {
         }
       ),
 
-      bottomNavigationBar: BubbleBottomBar(
-        hasNotch: true,
-        fabLocation: BubbleBottomBarFabLocation.end,
-        opacity: .2,
-        // currentIndex: currentIndex,
-        //onTap: changePage,
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(16),
-        ), //border radius doesn't work when the notch is enabled.
-        elevation: 8,
-        tilesPadding: EdgeInsets.symmetric(
-          vertical: 8.0,
-        ),
-        items: <BubbleBottomBarItem>[
-          BubbleBottomBarItem(
-            backgroundColor: BgaColor.bgaOrange,
-            icon: Icon(
-              Icons.home_filled,
-              color: BgaColor.bgaOrange,
-            ),
-            activeIcon: Icon(
-              Icons.home_filled,
-              color: BgaColor.bgaOrange,
-            ),
-            title: Text("Beranda"),
-          ),
-          BubbleBottomBarItem(
-              backgroundColor: BgaColor.bgaOrange,
-              icon: Icon(
-                Icons.dashboard,
-                color: BgaColor.bgaOrange,
-              ),
-              activeIcon: Icon(
-                Icons.dashboard,
-                color: BgaColor.bgaOrange,
-              ),
-              title: Text("Logs")),
+      bottomNavigationBar: BgaBubbleBottomNavigation(currentIndex: 0, onTap: (index){
 
-
-
-        ],
-      ),
+      },)
     );
   }
 }

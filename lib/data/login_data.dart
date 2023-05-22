@@ -18,7 +18,6 @@ class LoginData {
     );
   }
 
-
 }
 
 class User {
@@ -39,6 +38,4 @@ class User {
       division: json['division'],
     );
   }
-
-
 }

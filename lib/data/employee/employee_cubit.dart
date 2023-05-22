@@ -7,7 +7,8 @@ import 'employee_state.dart';
 
 
 class EmployeeCubit extends Cubit<EmployeeState> {
-final EmployeeRepository _employeeRepository;
+
+  final EmployeeRepository _employeeRepository;
 
   EmployeeCubit(this._employeeRepository) : super(EmployeeInitial());
 
@@ -25,7 +26,7 @@ final EmployeeRepository _employeeRepository;
 
   void add (Employee employee) async{
     try{
-      await _employeeRepository.insert(employee);
+      await _employeeRepository.insertEmployee(employee);
       final employees = await _employeeRepository.getAll();
       emit(EmployeeLoaded(employees));
 

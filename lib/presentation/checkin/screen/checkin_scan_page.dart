@@ -5,7 +5,6 @@ import 'package:BTechApp_Final_Project/core/utils/theme/app_decoration.dart';
 import 'package:BTechApp_Final_Project/repository/EmployeeRepository.dart';
 import 'package:BTechApp_Final_Project/repository/checkin_repository.dart';
 import 'package:BTechApp_Final_Project/widgets/custom_button.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -43,70 +42,71 @@ class _QRScannerState extends State<QRScanner> {
             key: qrKey,
             onQRViewCreated: _onQRViewCreated,
             overlay: QrScannerOverlayShape(
-                borderColor: Colors.red,
-                borderRadius: 10,
-                borderLength: 30,
-                borderWidth: 10,
+                borderColor: BgaColor.bgaOrange,
+                borderRadius: BorderRadiusStyle.borderRadiusQR10,
+                borderLength: BorderRadiusStyle.borderLengthQR,
+                borderWidth: BorderRadiusStyle.borderWidthQR,
                 cutOutSize: MediaQuery.of(context).size.width/1.5),
             onPermissionSet: (ctrl, p) => _onPermissionSet(context, ctrl, p),
           ),
 
-          Positioned(
-            top: 20,
-            left: 20,
-            child: IconButton(
-              onPressed: () {
+      Positioned(
+        top: 20,
+        left: 20,
+        child: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
 
+          icon: Icon(Icons.arrow_back, color: BgaColor.bgaWhiteA700),
+        ),
 
-              },
-              icon: Icon(Icons.arrow_back, color: BgaColor.bgaWhiteA700),
-            ),
+      ),
+
+      Positioned(
+        top: 20,
+        left: 0,
+        right: 0,
+        child: IconButton(
+          onPressed: () async {
+
+            await controller?.toggleFlash();
+          },
+          icon: FutureBuilder(
+            future: controller?.getFlashStatus(),
+            builder: (context, snapshot) {
+              if (snapshot.data == true) {
+                return Icon(Icons.flash_on_outlined, color: BgaColor.bgaWhiteA700,);
+              } else {
+                return Icon(Icons.flash_off_outlined,  color: BgaColor.bgaWhiteA700);
+              }
+            },
           ),
-          Positioned(
-            top: 20,
-            left: 0,
-            right: 0,
-            child: IconButton(
-              onPressed: () async {
+        ),
+      ),
 
-                await controller?.toggleFlash();
-                setState(() {});
-              },
-              icon: FutureBuilder(
-                future: controller?.getFlashStatus(),
-                builder: (context, snapshot) {
-                  if (snapshot.data == true) {
-                    return Icon(Icons.flash_on_outlined, color: BgaColor.bgaWhiteA700,);
-                  } else {
-                    return Icon(Icons.flash_off_outlined,  color: BgaColor.bgaWhiteA700);
-                  }
-                },
-              ),
-            ),
+      Positioned(
+        top: 20,
+        right: 20,
+
+        child: IconButton(
+          onPressed: () async {
+            await controller?.flipCamera();
+          },
+          icon: FutureBuilder(
+            future: controller?.getCameraInfo(),
+            builder: (context, snapshot) {
+              if (snapshot.data != null) {
+                return Icon(Icons.flip_camera_android_rounded, color: BgaColor.bgaWhiteA700);
+              } else {
+                return const CircularProgressIndicator();
+              }
+            },
           ),
+        ),
+      ),
 
 
-          Positioned(
-            top: 20,
-            right: 20,
-
-            child: IconButton(
-              onPressed: () async {
-                await controller?.flipCamera();
-                setState(() {});
-              },
-              icon: FutureBuilder(
-                future: controller?.getCameraInfo(),
-                builder: (context, snapshot) {
-                  if (snapshot.data != null) {
-                    return Icon(Icons.flip_camera_android_rounded, color: BgaColor.bgaWhiteA700);
-                  } else {
-                    return const CircularProgressIndicator();
-                  }
-                },
-              ),
-            ),
-          ),
 
 
         ],
@@ -136,16 +136,45 @@ class _QRScannerState extends State<QRScanner> {
       );
     }
   }
+
+
   void _showBottomSheet(context, String barcodeType, String data) async {
-    List<String> qrData = data.split(';');
+    List<String> qrData = data.split('|');
     String nik = qrData[0];
     String name = qrData[1];
 
+    int isCheckedIn = 1;
+
     final employee = await EmployeeRepository().findEmployeeByNik(nik, name);
     final employee_checkin = CheckInRepository();
+    final int? id= 0;
     if (employee == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Data tidak ditemukan.', style: BgaTextStyle.titleBoldText,)),
+      );
+      return;
+    }
+
+    final existingCheckIn = await employee_checkin.findEmployeeIsCheckedInByNik(nik, name, isCheckedIn);
+
+    if (existingCheckIn != null) {
+      // validasi ketika pekerja sudah melakukan check-in sebelumnya
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Karyawan Sudah Check-In'),
+            content: Text('Karyawan dengan NIK $nik - $name sudah melakukan check-in sebelumnya.'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text('OK'),
+              ),
+            ],
+          );
+        },
       );
       return;
     }
@@ -194,16 +223,23 @@ class _QRScannerState extends State<QRScanner> {
                   isExpanded: true,
                 ),
                 SizedBox(height: BgaSizedboxSize.getSizedBoxMaxHeight()),
-                BgaButton(
-                  text: 'Lanjutkan',
-                  onPressed: () async {
-                    final now = DateTime.now();
-                    final formattedTime = DateFormat('HH:mm').format(now);
-                    await employee_checkin.insertCheckIn(nik, name, 1, formattedTime);
-                    Navigator.pop(context);
-                  },
-                ),
-              ],
+
+
+        BgaButton(
+        text: 'Lanjutkan',
+          onPressed: () async {
+
+            final now = DateTime.now();
+            final formattedTime = DateFormat('HH:mm').format(now);
+            // await employee_checkin.openCheckIn();
+            await employee_checkin.insertCheckIn( nik, name, 1, formattedTime);
+            Navigator.pop(context);
+
+
+          },
+        ),
+
+        ],
             ),
           ),
         );

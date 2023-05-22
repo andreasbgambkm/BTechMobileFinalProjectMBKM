@@ -96,6 +96,7 @@ class HomePage extends StatelessWidget {
                                   height: BgaIconSize.getIconUserHeight(),
                                 ),
                                 onPressed: () async {
+                                  await EmployeeRepository().open();
                                   await EmployeeRepository().injectFromJson();
                                   Scaffold.of(context).openDrawer();
                                 },

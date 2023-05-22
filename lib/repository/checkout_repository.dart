@@ -1,11 +1,11 @@
-import 'package:BTechApp_Final_Project/models/checkin_model.dart';
+import 'package:BTechApp_Final_Project/models/checkout_model.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
-class CheckInRepository {
+class CheckOutRepository {
 
-    static const String tableName = 'CheckIn';
+  static const String tableName = 'CheckOut';
 
-    Future<Database> createCheckInTable() async {
+  Future<Database> createCheckOutTable() async {
     final dbPath = await getDatabasesPath();
     final databasePath = join(dbPath, 'Employee_database.db');
 
@@ -18,8 +18,8 @@ class CheckInRepository {
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             nik TEXT,
             name TEXT,
-            isCheckedIn INTEGER,
-            checkInTime TEXT,
+            isCheckedOut INTEGER,
+            CheckOutTime TEXT,
             FOREIGN KEY (nik) REFERENCES Employees(nik)
           )
           '''
@@ -34,7 +34,7 @@ class CheckInRepository {
       if (oldVersion < 9) {
         await db.transaction((txn) async {
           await txn.execute('BEGIN TRANSACTION;');
-          await txn.execute('CREATE TABLE CheckIn_temp AS SELECT * FROM CheckIn;');
+          await txn.execute('CREATE TABLE CheckOut_temp AS SELECT * FROM CheckOut;');
           await txn.execute('COMMIT;');
         });
       }
@@ -46,27 +46,27 @@ class CheckInRepository {
     final db = await openDatabase(
       '$dbPath/Employee_database.db',
       onCreate: (db, version) async {
-        await createCheckInTable();
+        await createCheckOutTable();
       },
       version: 8,
     );
     return db;
   }
 
-  // Get semua CheckIn dengan isCheckedIn bernilai 1
-  Future<List<CheckInModel>> getAllSuccessfulCheckIns() async {
+  // Get semua CheckOut dengan isCheckedOut bernilai 1
+  Future<List<CheckOutModel>> getAllSuccessfulCheckOut() async {
     final db = await _getDb();
-    final maps = await db.query(tableName, where: 'isCheckedIn = ?', whereArgs: [1]);
+    final maps = await db.query(tableName, where: 'isCheckedOut = ?', whereArgs: [1]);
     return List.generate(maps.length, (i) {
-      final checkIn = CheckInModel.fromMap(maps[i]);
-      return checkIn;
+      final CheckOut = CheckOutModel.fromMap(maps[i]);
+      return CheckOut;
     });
   }
 
 
 //open
 
-  Future<Database> openCheckIn() async {
+  Future<Database> openCheckOut() async {
     final dbPath = await getDatabasesPath();
     final databasePath = join(dbPath, 'Employee_database.db');
 
@@ -79,8 +79,9 @@ class CheckInRepository {
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             nik TEXT,
             name TEXT,
-            isCheckedIn INTEGER,
-            checkInTime TEXT,
+            isCheckedOut INTEGER,
+            CheckOutTime TEXT,
+            note TEXT,
             FOREIGN KEY (nik) REFERENCES Employees(nik)
           )
           ''',
@@ -90,40 +91,41 @@ class CheckInRepository {
     );
   }
 
-  Future<Map<String, dynamic>?> findEmployeeIsCheckedInByNik(String nik, String name, int isCheckedIn) async {
+  Future<Map<String, dynamic>?> findEmployeeIsCheckedOutByNik(String nik, String name, int isCheckedOut) async {
     final Database db = await _getDb() ;
     final List<Map<String, dynamic>> maps = await db.query(
-      CheckInRepository.tableName,
-      where: "nik = ? AND name = ? AND isCheckedIn = ?",
-      whereArgs: [nik, name, isCheckedIn],
+      CheckOutRepository.tableName,
+      where: "nik = ? AND name = ? AND isCheckedOut = ?",
+      whereArgs: [nik, name, isCheckedOut],
     );
     if (maps.isNotEmpty) {
       return maps.first;
     }
     return null;
   }
-  // Insert CheckIn baru
-  Future<CheckInModel> insertCheckIn(String nik, String name, int isCheckedIn, String checkinTime) async {
-    final db = await openCheckIn();
-    final checkIn = CheckInModel(
+  // Insert CheckOut baru
+  Future<CheckOutModel> insertCheckOut(String nik, String name, int isCheckedOut, String checkoutTime, String note) async {
+    final db = await openCheckOut();
+    final CheckOut = CheckOutModel(
       nik: nik,
       name: name,
-      isCheckedIn: isCheckedIn,
-      checkinTime: checkinTime,
+      isCheckedOut: isCheckedOut,
+      checkoutTime: checkoutTime,
+      note: note,
     );
-    checkIn.id = await db.insert(tableName, checkIn.toMap());
-    return checkIn;
+    CheckOut.id = await db.insert(tableName, CheckOut.toMap());
+    return CheckOut;
   }
 
 
-  // Update CheckIn
-  Future<void> updateCheckIn(CheckInModel checkIn) async {
+  // Update CheckOut
+  Future<void> updateCheckOut(CheckOutModel CheckOut) async {
     final db = await _getDb();
     await db.update(
       tableName,
-      checkIn.toMap(),
+      CheckOut.toMap(),
       where: 'id = ?',
-      whereArgs: [checkIn.id],
+      whereArgs: [CheckOut.id],
     );
   }
 

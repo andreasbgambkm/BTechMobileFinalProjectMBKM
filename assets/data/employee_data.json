@@ -31,5 +31,16 @@
     "isCheckedIn": 0,
     "isCheckedOut": 0,
     "checkin_time" : null
+  },
+  {
+    "nik": "004",
+    "name": "Siapa Saja",
+    "age": 30,
+    "position": "Tkg Pukul",
+    "division": "divisi-5",
+    "kemandoran": "Kemandoran XYZ",
+    "isCheckedIn": 0,
+    "isCheckedOut": 0,
+    "checkin_time" : null
   }
 ]

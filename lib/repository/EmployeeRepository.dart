@@ -1,23 +1,28 @@
 
 import 'dart:convert';
 
+import 'package:BTechApp_Final_Project/models/checkin_model.dart';
 import 'package:BTechApp_Final_Project/models/employee_model.dart';
 import 'package:flutter/services.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
 class EmployeeRepository {
-  static const String tableName = 'Employees';
+  static const String employeeTableName = 'Employees';
+  static const String checkInTableName = 'CheckIn';
 
   Future<Database> open() async {
+    final dbPath = await getDatabasesPath();
+    final databasePath = join(dbPath, 'Employee_database.db');
+
     return openDatabase(
-      join(await getDatabasesPath(), 'Employee_database.db'),
-      onCreate: (db, version) {
-        return db.execute(
-            '''
-        CREATE TABLE $tableName(
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
-          nik TEXT,
+      databasePath,
+      onCreate: (db, version) async {
+
+        await db.execute('''
+        CREATE TABLE IF NOT EXISTS $employeeTableName(
+          
+          nik TEXT PRIMARY KEY,
           name TEXT,
           age INTEGER,
           position TEXT,
@@ -27,22 +32,36 @@ class EmployeeRepository {
           isCheckedOut INTEGER,
           checkin_time TEXT
         )
-        '''
-        );
-      },
-      onUpgrade: (db, oldVersion, newVersion) async{
-        if (oldVersion < 6) {
+      ''');
 
-          await _upgradeDatabase(db, oldVersion, newVersion);
+
+        db.execute('''
+        CREATE TABLE IF NOT EXISTS $checkInTableName(
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          nik TEXT,
+          name TEXT,
+          isCheckedIn INTEGER,
+          checkInTime TEXT,
+          FOREIGN KEY (nik) REFERENCES Employees(nik)
+        )
+      ''');
+
+
+      },
+      version: 9,
+      onUpgrade: (db, oldVersion, newVersion) async {
+        if (oldVersion < newVersion) {
+          if (oldVersion < 10) {
+            await _upgradeDatabase(db, oldVersion, newVersion);
+          }
         }
       },
-      version: 6,
     );
   }
 
   Future<void> _upgradeDatabase(Database db, int oldVersion, int newVersion) async {
     if (oldVersion < newVersion) {
-      if (oldVersion < 5) {
+      if (oldVersion < 10) {
         await db.transaction((txn) async {
           await txn.execute('BEGIN TRANSACTION;');
           await txn.execute('CREATE TABLE Employees_temp AS SELECT * FROM Employees;');
@@ -59,7 +78,7 @@ class EmployeeRepository {
   Future<Map<String, dynamic>?> findEmployeeByNik(String nik, String name) async {
     final Database db = await open();
     final List<Map<String, dynamic>> maps = await db.query(
-      EmployeeRepository.tableName,
+      EmployeeRepository.employeeTableName,
       where: "nik = ? AND name = ?",
       whereArgs: [nik, name],
     );
@@ -76,25 +95,42 @@ class EmployeeRepository {
 
     final Database db = await open();
 
-    for (final employee in employees) {
-      final existingEmployee = await findEmployeeByNik(employee.nik, employee.name);
-      if (existingEmployee == null) {
-        await insert(employee);
-      } else {
-        employee.nik = existingEmployee['nik'];
-        employee.name = existingEmployee['name'];
-        await update(employee);
+    try {
+      for (final employee in employees) {
+        final existingEmployee = await findEmployeeByNik(employee.nik, employee.name);
+        if (existingEmployee == null) {
+          await insertEmployee(employee);
+        } else {
+          employee.nik = existingEmployee['nik'];
+          employee.name = existingEmployee['name'];
+          await update(employee);
+        }
       }
+    } finally {
+      db.close(); // Tutup objek Database
     }
   }
 
 
-  Future<void> insert(Employee employee) async {
+  Future<CheckInModel> insertCheckIn(String nik, String name, int isCheckedIn, String checkinTime) async {
+    final db = await open();
+    final checkIn = CheckInModel(
+      nik: nik,
+      name: name,
+      isCheckedIn: isCheckedIn,
+      checkinTime: checkinTime,
+    );
+    checkIn.id = await db.insert(checkInTableName, checkIn.toMap());
+    return checkIn;
+  }
+
+
+  Future<void> insertEmployee(Employee employee) async {
     final db = await open();
 
     final existingEmployee = await findEmployeeByNik(employee.nik, employee.name);
     if (existingEmployee == null) {
-      await db.insert(tableName, employee.toMap());
+      await db.insert(employeeTableName, employee.toMap());
     } else {
       // data dengan nik yang sama sudah ada, lakukan update
       employee.nik = existingEmployee['nik'];
@@ -109,7 +145,7 @@ class EmployeeRepository {
 
    Future<List<Employee>> getAll() async {
     final db = await open();
-    final maps = await db.query(tableName);
+    final maps = await db.query(employeeTableName);
     return List.generate(maps.length, (i) {
       return Employee.fromMap(maps[i]);
     });
@@ -117,7 +153,7 @@ class EmployeeRepository {
 
   Future<List<Employee>> getAllCheckInModels() async {
     final db = await open();
-    final maps = await db.query(tableName);
+    final maps = await db.query(employeeTableName);
     return List.generate(maps.length, (i) {
       final employee = Employee.fromMap(maps[i]);
       return Employee(
@@ -131,17 +167,19 @@ class EmployeeRepository {
     });
   }
 
+
+
    Future<void> update(Employee employee) async {
     final db = await open();
-    await db.update(tableName, employee.toMap(), where: 'nik = ?', whereArgs: [employee.nik]);
+    await db.update(employeeTableName, employee.toMap(), where: 'nik = ?', whereArgs: [employee.nik]);
   }
   Future<void> deleteAll() async {
     final db = await open();
-    await db.delete(tableName, where: '1');
+    await db.delete(employeeTableName, where: '1');
   }
 
    Future<void> deleteById(String nik) async {
     final db = await open();
-    await db.delete(tableName, where: 'nik = ?', whereArgs: [nik]);
+    await db.delete(employeeTableName, where: 'nik = ?', whereArgs: [nik]);
   }
 }

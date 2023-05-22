@@ -4,9 +4,6 @@ import 'package:BTechApp_Final_Project/core/utils/theme/app_decoration.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-
-
-
 class CustomCardGps extends StatelessWidget {
   final String title;
   final String subtitle;
@@ -193,7 +190,7 @@ class CustomCardMenu extends StatelessWidget {
     required this.title,
     required this.counter,
     this.width =156,
-    this.height = 84,
+    this.height = 94,
     this.route,
 
   }) : super(key: key);

@@ -1,25 +1,22 @@
-
-final String tableName = 'CheckIn';
-
 class CheckInModel {
   int? id;
-  String? nik;
-  String? name;
-  int? isCheckedIn;
+  String nik;
+  String name;
+  int isCheckedIn;
   String? checkinTime;
 
   CheckInModel({
     this.id,
-    this.nik,
-    this.name,
-    this.isCheckedIn,
+    required this.nik,
+    required this.name,
+    this.isCheckedIn = 0,
     this.checkinTime,
   });
 
   // konversi dari objek CheckIn menjadi Map
   Map<String, dynamic> toMap() {
     return {
-      'id': id,
+      'id'  : id,
       'nik': nik,
       'name': name,
       'isCheckedIn': isCheckedIn,
@@ -37,4 +34,9 @@ class CheckInModel {
       checkinTime: map['checkinTime'],
     );
   }
-}
+
+
+
+  }
+
+

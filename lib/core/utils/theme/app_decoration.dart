@@ -70,12 +70,18 @@ class BorderRadiusStyle {
     ),
   );
 
+
+  static double borderRadiusQR10 = 10.0;
+  static double borderLengthQR = 30.0;
+  static double borderWidthQR = 10.0;
+
+
   static BorderRadius roundedBorder5 = BorderRadius.circular(5
   );
 
   static BorderRadius bgaroundedBorder15 = BorderRadius.circular(15);
 
-  static BorderRadius roundedBorder10 = BorderRadius.circular(10);
+  static BorderRadius roundedBorder10 = BorderRadius.circular(10.0);
 
   static BorderRadius customBorderTL10 = BorderRadius.only(
     topLeft: Radius.circular(10),

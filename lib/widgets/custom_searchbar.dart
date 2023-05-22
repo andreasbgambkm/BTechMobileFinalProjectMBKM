@@ -1,4 +1,5 @@
 import 'package:BTechApp_Final_Project/core/utils/color_pallete.dart';
+import 'package:BTechApp_Final_Project/core/utils/constant.dart';
 import 'package:BTechApp_Final_Project/core/utils/theme/app_decoration.dart';
 import 'package:flutter/material.dart';
 import 'package:icons_flutter/icons_flutter.dart';
@@ -20,7 +21,7 @@ class BgaCustomSearchBar extends StatelessWidget {
               borderRadius: BorderRadius.circular(15.0),
               borderSide: BorderSide.none
           ),
-          hintText: 'Siapa Yang Anda Cari?',
+          hintText: searchBarOnEmployeeList,
           hintStyle: BgaTextStyle.searchBarText,
           prefixIcon: Icon(FlutterIcons.search_faw5s, size: 20.0,),
           prefixIconColor: BgaColor.bgaBlackTitleBold,

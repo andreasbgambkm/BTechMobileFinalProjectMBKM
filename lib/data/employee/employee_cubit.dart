@@ -1,5 +1,5 @@
 import 'package:BTechApp_Final_Project/models/employee_model.dart';
-import 'package:BTechApp_Final_Project/repository/EmployeeRepository.dart';
+import 'package:BTechApp_Final_Project/repository/employee_repository.dart';
 import 'package:bloc/bloc.dart';
 
 import 'employee_state.dart';

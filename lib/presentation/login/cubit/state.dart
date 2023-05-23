@@ -14,6 +14,7 @@ class LoginInitial extends LoginState {}
 class LoginLoading extends LoginState {}
 
 class LoginSuccess extends LoginState {
+
   final LoginData loginData;
 
   const LoginSuccess({required this.loginData});
@@ -30,3 +31,6 @@ class LoginFailure extends LoginState {
   @override
   List<Object> get props => [error];
 }
+
+class Logout extends LoginState {} // State untuk logout
+

@@ -1,6 +1,6 @@
 import 'package:BTechApp_Final_Project/core/utils/constant.dart';
 import 'package:BTechApp_Final_Project/data/login_data.dart';
-import 'package:BTechApp_Final_Project/repository/EmployeeRepository.dart';
+import 'package:BTechApp_Final_Project/repository/employee_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:BTechApp_Final_Project/core/utils/theme/app_decoration.dart';
@@ -96,8 +96,8 @@ class HomePage extends StatelessWidget {
                                   height: BgaIconSize.getIconUserHeight(),
                                 ),
                                 onPressed: () async {
-                                  await EmployeeRepository().open();
-                                  await EmployeeRepository().injectFromJson();
+                                  // await EmployeeRepository().open();
+                                  // await EmployeeRepository().injectFromJson();
                                   Scaffold.of(context).openDrawer();
                                 },
                               ),

@@ -2,8 +2,8 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:BTechApp_Final_Project/core/utils/color_pallete.dart';
 import 'package:BTechApp_Final_Project/core/utils/theme/app_decoration.dart';
-import 'package:BTechApp_Final_Project/repository/EmployeeRepository.dart';
 import 'package:BTechApp_Final_Project/repository/checkin_repository.dart';
+import 'package:BTechApp_Final_Project/repository/employee_repository.dart';
 import 'package:BTechApp_Final_Project/widgets/custom_button.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +12,7 @@ import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:vibration/vibration.dart';
 
 class QRScanner extends StatefulWidget {
-  static String routeName = "/checkin_scanner";
+  static String routeName = "/checkin";
   const QRScanner({Key? key}) : super(key: key);
 
   @override
@@ -63,29 +63,28 @@ class _QRScannerState extends State<QRScanner> {
 
       ),
 
-      Positioned(
-        top: 20,
-        left: 0,
-        right: 0,
-        child: IconButton(
-          onPressed: () async {
-
-            await controller?.toggleFlash();
-          },
-          icon: FutureBuilder(
-            future: controller?.getFlashStatus(),
-            builder: (context, snapshot) {
-              if (snapshot.data == true) {
-                return Icon(Icons.flash_on_outlined, color: BgaColor.bgaWhiteA700,);
-              } else {
-                return Icon(Icons.flash_off_outlined,  color: BgaColor.bgaWhiteA700);
-              }
-            },
+          Positioned(
+            top: 20,
+            left: 0,
+            right: 0,
+            child: FutureBuilder<bool?>(
+              future: controller?.getFlashStatus(),
+              builder: (context, snapshot) {
+                return IconButton(
+                  onPressed: () async {
+                    await controller?.toggleFlash();
+                  },
+                  icon: Icon(
+                    snapshot.data == true ? Icons.flash_on_outlined : Icons.flash_off_outlined,
+                    color: BgaColor.bgaWhiteA700,
+                  ),
+                );
+              },
+            ),
           ),
-        ),
-      ),
 
-      Positioned(
+
+          Positioned(
         top: 20,
         right: 20,
 

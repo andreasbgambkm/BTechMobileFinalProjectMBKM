@@ -1,7 +1,9 @@
 import 'package:BTechApp_Final_Project/core/utils/color_pallete.dart';
 import 'package:BTechApp_Final_Project/core/utils/theme/app_decoration.dart';
 import 'package:BTechApp_Final_Project/presentation/login/cubit/state.dart';
-import 'package:BTechApp_Final_Project/repository/EmployeeRepository.dart';
+import 'package:BTechApp_Final_Project/repository/checkin_repository.dart';
+import 'package:BTechApp_Final_Project/repository/checkout_repository.dart';
+import 'package:BTechApp_Final_Project/repository/employee_repository.dart';
 
 import 'package:BTechApp_Final_Project/widgets/custom_icon.dart';
 import 'package:flutter/material.dart';
@@ -135,13 +137,18 @@ class _LoginViewState extends State<LoginView> {
 
                               backgroundColor: BgaColor.bgaOrange,
                               onPressed: () async {
-                               //await EmployeeRepository().insertCheckIn('001', 'Mr 456876', 1, DateTime.now().toString());
+                                final EmployeeRepository _employeeRepository =EmployeeRepository();
+                                final CheckInRepository _checkInRepository = CheckInRepository();
+                                final CheckOutRepository _checkOutRepository = CheckOutRepository();
+                                await _employeeRepository.open();
+                                await _employeeRepository.injectFromJson();
+                                await _checkInRepository.openCheckIn();
+                                await _checkOutRepository.openCheckOut();
                                 final username = _usernameController.text;
                                 final password = _passwordController.text;
-                              context.read<LoginCubit>().performLogin(username, password);
+                                context.read<LoginCubit>().performLogin(username, password);
                               },
                             ),
-
                           ],
                         ),
                       );

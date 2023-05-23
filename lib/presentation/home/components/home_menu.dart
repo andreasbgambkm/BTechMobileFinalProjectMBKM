@@ -16,9 +16,9 @@ class HomeMenu extends StatelessWidget {
             CustomCardMenu(
               title: 'CheckIn',
               counter: 100,
-              route: '/checkin_scan',
+              route: '/checkin',
              ),
-            CustomCardMenu(title: 'CheckOut', counter: 15, route: '/coba_screen',),
+            CustomCardMenu(title: 'CheckOut', counter: 15, route: '/checkout',),
           ],
         ),
 

@@ -20,6 +20,7 @@ class CheckOutRepository {
             name TEXT,
             isCheckedOut INTEGER,
             CheckOutTime TEXT,
+            notes TEXT, 
             FOREIGN KEY (nik) REFERENCES Employees(nik)
           )
           '''

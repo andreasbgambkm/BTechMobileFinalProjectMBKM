@@ -1,7 +1,8 @@
 
 import 'package:BTechApp_Final_Project/core/utils/color_pallete.dart';
 import 'package:BTechApp_Final_Project/data/login_data.dart';
-import 'package:BTechApp_Final_Project/repository/EmployeeRepository.dart';
+import 'package:BTechApp_Final_Project/presentation/login/cubit/cubit.dart';
+import 'package:BTechApp_Final_Project/repository/employee_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -16,6 +17,7 @@ class BgaDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final LoginCubit loginCubit = LoginCubit();
 
     final screenWidth = MediaQuery.of(context).size.width;
     final drawerWidth = screenWidth * (3/4); // Menghitung lebar drawer sebesar 1/3 dari lebar layar
@@ -96,44 +98,11 @@ class BgaDrawer extends StatelessWidget {
                     fontFamily: 'Poppins',
                     fontSize: 13),
               ),
-              onTap: () async {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      title: Text('Konfirmasi Logout'),
-                      content: Text('Anda yakin ingin logout?'),
-                      actions: <Widget>[
-                        TextButton(
-                          style:ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all<Color>(BgaColor.bgaOrange),
-                            foregroundColor: MaterialStateProperty.all<Color>(BgaColor.bgaWhiteA700),
-                          ),
-                          child: Text('Batal', selectionColor: BgaColor.bgaWhiteA700,style: TextStyle(fontFamily: 'Poppins', color: BgaColor.bgaWhiteA700),),
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                        ),
-                        TextButton(
-                          style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all<Color>(BgaColor.bgaOrange),
-                            foregroundColor: MaterialStateProperty.all<Color>(BgaColor.bgaWhiteA700),
+              onTap: () {
 
-                    ),
-                          child: Text('Logout', selectionColor: BgaColor.bgaOrange,style: TextStyle(fontFamily: 'Poppins', color: BgaColor.bgaWhiteA700),),
-                          onPressed: () async {
+                loginCubit.performLogout(context);
 
-                            await EmployeeRepository().deleteAll();
 
-                            Navigator.pushNamedAndRemoveUntil(
-                              context, '/login', (route) => false,
-                            );
-                          },
-                        ),
-                      ],
-                    );
-                  },
-                );
               },
             ),
 

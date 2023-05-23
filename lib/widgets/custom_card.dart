@@ -236,101 +236,101 @@ class CustomCardMenu extends StatelessWidget {
   }
 }
 
+// class CustomCardCheck extends StatelessWidget {
+//   final String name;
+//   final String nik;
+//   final DateTime checkin_time;
+//   final String? note;
+//   final String label;
+//
+//
+//    CustomCardCheck(
+//       {super.key, required this.name, required this.nik, required this.checkin_time, this.note, required this.label});
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Card(
+//       borderOnForeground: true,
+//       elevation: 2,
+//       shape: RoundedRectangleBorder(
+//         borderRadius: BorderRadius.circular(8),
+//       ),
+//       child: ListTile(
+//         title: Padding(
+//           padding: const EdgeInsets.only(bottom: 8.0),
+//           child: Row(
+//             children: <Widget>[
+//               Text(
+//                 name,
+//                 style: const TextStyle(
+//                     fontFamily: 'Poppins',
+//                     fontSize: 14,
+//                     fontWeight: FontWeight.bold),
+//               ),
+//               const Spacer(),
+//               InkWell(
+//                 onTap: () {
+//                   // aksi yang akan dilakukan ketika teks di klik
+//                 },
+//                 child: Text(
+//                   label,
+//                   style: TextStyle(
+//                     decoration: TextDecoration.underline,
+//                     color: BgaColor.bgaBlack90001,
+//                     fontSize: 12,
+//                   ),
+//                 ),
+//               ),
+//             ],
+//           ),
+//         ),
+//
+//         subtitle: Padding(
+//           padding: const EdgeInsets.only(top: 18.0, bottom: 8),
+//           child: Row(
+//             children: <Widget> [
+//               Text(
+//                 "NIK $nik,",
+//                 style: const TextStyle(
+//                     fontFamily: 'Poppins',
+//                     fontSize: 14,
+//                     fontWeight: FontWeight.normal),
+//               ),
+//               const Spacer(),
+//               Text(
+//                 checkin_time.toString(),
+//                 style: const TextStyle(
+//                   backgroundColor: Color.fromARGB(255, 233, 228, 1),
+//                     fontFamily: 'Poppins',
+//                     fontSize: 12,
+//                     fontWeight: FontWeight.normal),
+//               ),
+//
+//
+//             ],
+//           ),
+//         ),
+//         onTap: () {
+//           // Aksi yang akan dilakukan ketika card ditekan
+//         },
+//       ),
+//     );
+//   }
+// }
+
 class CustomCardCheck extends StatelessWidget {
   final String name;
-  final String nik;
-  final DateTime checkin_time;
-  final String? note;
-  final String label;
-
-
-   CustomCardCheck(
-      {super.key, required this.name, required this.nik, required this.checkin_time, this.note, required this.label});
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      borderOnForeground: true,
-      elevation: 2,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: ListTile(
-        title: Padding(
-          padding: const EdgeInsets.only(bottom: 8.0),
-          child: Row(
-            children: <Widget>[
-              Text(
-                name,
-                style: const TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold),
-              ),
-              const Spacer(),
-              InkWell(
-                onTap: () {
-                  // aksi yang akan dilakukan ketika teks di klik
-                },
-                child: Text(
-                  label,
-                  style: TextStyle(
-                    decoration: TextDecoration.underline,
-                    color: BgaColor.bgaBlack90001,
-                    fontSize: 12,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-
-        subtitle: Padding(
-          padding: const EdgeInsets.only(top: 18.0, bottom: 8),
-          child: Row(
-            children: <Widget> [
-              Text(
-                "NIK $nik,",
-                style: const TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 14,
-                    fontWeight: FontWeight.normal),
-              ),
-              const Spacer(),
-              Text(
-                checkin_time.toString(),
-                style: const TextStyle(
-                  backgroundColor: Color.fromARGB(255, 233, 228, 1),
-                    fontFamily: 'Poppins',
-                    fontSize: 12,
-                    fontWeight: FontWeight.normal),
-              ),
-              
-              
-            ],
-          ), 
-        ),
-        onTap: () {
-          // Aksi yang akan dilakukan ketika card ditekan
-        },
-      ),
-    );
-  }
-}
-
-
-
-class CustomCardCheckIn extends StatelessWidget {
-  final String name;
-  final int isCheckedIn;
+  final int isChecked;
   final VoidCallback onTap;
   final String nik;
+  final String? notes;
 
-  const CustomCardCheckIn({
+  const CustomCardCheck({
     required this.name,
-    required this.isCheckedIn,
+    required this.isChecked,
     required this.onTap,
     required this.nik,
+    this.notes,
   });
 
   @override
@@ -354,41 +354,62 @@ class CustomCardCheckIn extends StatelessWidget {
               InkWell(
                 onTap: onTap,
                 child: Text(
-                  isCheckedIn.toString(),
+                  isChecked.toString(),
                   style: BgaTextStyle.subtitleText,
                 ),
               ),
             ],
           ),
         ),
-
         subtitle: Padding(
           padding: BgaPaddingSize.getPaddingNikInCheckIn(),
           child: Row(
-            children: <Widget> [
+            children: <Widget>[
               Text(
                 "NIK  ",
-                style:BgaTextStyle.titleNormalText,
+                style: BgaTextStyle.titleNormalText,
               ),
-
               Text(
-                  nik,
-                  style: BgaTextStyle.titleNormalText
+                nik,
+                style: BgaTextStyle.titleNormalText,
               ),
               const Spacer(),
               Text(
                 DateFormat('HH:mm').format(DateTime.now()).toString(),
-                style:  BgaTextStyle.subtitleBoldText,
+                style: BgaTextStyle.subtitleBoldText,
               ),
-
+              IconButton(
+                icon: Icon(Icons.edit),
+                onPressed: () {
+                  // Aksi ketika tombol pensil di klik
+                  // Tambahkan logika untuk menampilkan kolom catatan
+                },
+              ),
             ],
           ),
         ),
-        onTap: () {
-
-        },
+        onTap: onTap,
+        trailing: notes != null && notes!.isNotEmpty
+            ? Column(
+          children: [
+            const Divider(),
+            Expanded(
+              child: ListTile(
+                title: Text(
+                  "Catatan:",
+                  style: BgaTextStyle.titleBoldText,
+                ),
+                subtitle: Text(
+                  notes!,
+                  style: BgaTextStyle.titleNormalText,
+                ),
+              ),
+            ),
+          ],
+        )
+            : null,
       ),
     );
-
   }
 }
+

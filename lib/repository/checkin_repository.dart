@@ -127,5 +127,10 @@ class CheckInRepository {
     );
   }
 
+  Future<void> deleteAllCheckIn() async {
+    final db = await _getDb();
+    await db.delete(tableName, where: '1');
+  }
+
 }
 

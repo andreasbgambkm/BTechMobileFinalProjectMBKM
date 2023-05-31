@@ -1,6 +1,7 @@
 import 'package:BTechApp_Final_Project/core/utils/color_pallete.dart';
 import 'package:BTechApp_Final_Project/core/utils/theme/app_decoration.dart';
 import 'package:BTechApp_Final_Project/data/login_data.dart';
+import 'package:BTechApp_Final_Project/presentation/checkin/cubit/checkin_scan_cubit/scan_checkin_cubit.dart';
 import 'package:BTechApp_Final_Project/presentation/checkin/screen/checkin_page.dart';
 import 'package:BTechApp_Final_Project/presentation/checkin/screen/checkin_scan_page.dart';
 import 'package:BTechApp_Final_Project/presentation/checkout/cubit/checkout_cubit/checkout_cubit_cubit.dart';
@@ -23,6 +24,7 @@ class MyApp extends StatelessWidget {
         BlocProvider<LoginCubit>(create: (context) => LoginCubit()),
         BlocProvider<CheckInCubit>(create: (context) => CheckInCubit()),
         BlocProvider<CheckOutCubit>(create: (context)=> CheckOutCubit()),
+        BlocProvider<QRScannerCubit>(create: (context) => QRScannerCubit()),
       ],
       child: MaterialApp(
         title: 'SPARTA (Sistem Perkebunan Area Bumitama)',

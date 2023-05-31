@@ -114,11 +114,14 @@ class _CheckOutPageState extends State<CheckOutPage> {
                       itemBuilder: (context, index) {
                         final CheckOut = state.CheckOutList[index];
                         return CustomCardCheck(
+
                           name: CheckOut.name,
-                          isChecked: CheckOut.isCheckedOut,
+                         label: 'Check Out',
                           onTap: () {},
                           nik: CheckOut.nik,
                           notes: CheckOut.note,
+                          isCheckout: true,
+                          checkinTime: '',
                         );
                       },
                     );

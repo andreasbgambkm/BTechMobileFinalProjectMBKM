@@ -8,3 +8,4 @@ const String buttonPrint = 'Cetak';
 const String searchBarOnEmployeeList = 'Siapa Yang Anda Cari?';
 const String imageEmptyList = 'assets/images/empty.png';
 const String textEmptyList = 'Daftar Pekerja Kosong';
+

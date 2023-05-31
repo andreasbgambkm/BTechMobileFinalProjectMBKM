@@ -1,23 +1,28 @@
-
+import 'package:BTechApp_Final_Project/presentation/checkin/cubit/checkin_cubit/checkin_cubit.dart';
 import 'package:BTechApp_Final_Project/widgets/custom_card.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomeMenu extends StatelessWidget {
   const HomeMenu({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Column (
+    return Column(
 
-      children: <Widget> [
+      children: <Widget>[
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: const <Widget> [
-            CustomCardMenu(
-              title: 'CheckIn',
-              counter: 100,
-              route: '/checkin',
-             ),
+          children: <Widget>[
+            BlocBuilder<CheckInCubit, CheckInState>(
+              builder: (context, state) {
+                return CustomCardMenu(
+                  title: 'CheckIn',
+                  counter: state.checkInList.length,
+                  route: '/checkin',
+                );
+              },
+            ),
             CustomCardMenu(title: 'CheckOut', counter: 15, route: '/checkout',),
           ],
         ),

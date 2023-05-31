@@ -1,4 +1,3 @@
-
 import 'package:BTechApp_Final_Project/core/utils/color_pallete.dart';
 import 'package:BTechApp_Final_Project/core/utils/theme/app_decoration.dart';
 import 'package:flutter/material.dart';
@@ -236,105 +235,47 @@ class CustomCardMenu extends StatelessWidget {
   }
 }
 
-// class CustomCardCheck extends StatelessWidget {
-//   final String name;
-//   final String nik;
-//   final DateTime checkin_time;
-//   final String? note;
-//   final String label;
-//
-//
-//    CustomCardCheck(
-//       {super.key, required this.name, required this.nik, required this.checkin_time, this.note, required this.label});
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Card(
-//       borderOnForeground: true,
-//       elevation: 2,
-//       shape: RoundedRectangleBorder(
-//         borderRadius: BorderRadius.circular(8),
-//       ),
-//       child: ListTile(
-//         title: Padding(
-//           padding: const EdgeInsets.only(bottom: 8.0),
-//           child: Row(
-//             children: <Widget>[
-//               Text(
-//                 name,
-//                 style: const TextStyle(
-//                     fontFamily: 'Poppins',
-//                     fontSize: 14,
-//                     fontWeight: FontWeight.bold),
-//               ),
-//               const Spacer(),
-//               InkWell(
-//                 onTap: () {
-//                   // aksi yang akan dilakukan ketika teks di klik
-//                 },
-//                 child: Text(
-//                   label,
-//                   style: TextStyle(
-//                     decoration: TextDecoration.underline,
-//                     color: BgaColor.bgaBlack90001,
-//                     fontSize: 12,
-//                   ),
-//                 ),
-//               ),
-//             ],
-//           ),
-//         ),
-//
-//         subtitle: Padding(
-//           padding: const EdgeInsets.only(top: 18.0, bottom: 8),
-//           child: Row(
-//             children: <Widget> [
-//               Text(
-//                 "NIK $nik,",
-//                 style: const TextStyle(
-//                     fontFamily: 'Poppins',
-//                     fontSize: 14,
-//                     fontWeight: FontWeight.normal),
-//               ),
-//               const Spacer(),
-//               Text(
-//                 checkin_time.toString(),
-//                 style: const TextStyle(
-//                   backgroundColor: Color.fromARGB(255, 233, 228, 1),
-//                     fontFamily: 'Poppins',
-//                     fontSize: 12,
-//                     fontWeight: FontWeight.normal),
-//               ),
-//
-//
-//             ],
-//           ),
-//         ),
-//         onTap: () {
-//           // Aksi yang akan dilakukan ketika card ditekan
-//         },
-//       ),
-//     );
-//   }
-// }
-
-class CustomCardCheck extends StatelessWidget {
+class CustomCardCheck extends StatefulWidget {
   final String name;
-  final int isChecked;
+  final String label;
   final VoidCallback onTap;
   final String nik;
   final String? notes;
+  final String checkinTime;
+  final bool isCheckout;
 
   const CustomCardCheck({
     required this.name,
-    required this.isChecked,
+    required this.label,
     required this.onTap,
     required this.nik,
     this.notes,
+    this.isCheckout = false,
+    required this.checkinTime,
   });
 
   @override
+  _CustomCardCheckState createState() => _CustomCardCheckState();
+}
+
+class _CustomCardCheckState extends State<CustomCardCheck> {
+  String? _notes;
+
+  @override
   Widget build(BuildContext context) {
+    DateTime currentTime = DateTime.now();
+    DateTime checkInTimeLimiter = DateTime(
+      currentTime.year,
+      currentTime.month,
+      currentTime.day,
+      8,
+      0,
+    );
+
+    bool isLateCheckIn = currentTime.isAfter(checkInTimeLimiter);
+
+    Color labelBackgroundColor = isLateCheckIn ? BgaColor.bgaLightRedList : BgaColor.bgaLightGreen100;
+
     return Card(
       borderOnForeground: true,
       elevation: 2,
@@ -347,49 +288,66 @@ class CustomCardCheck extends StatelessWidget {
           child: Row(
             children: <Widget>[
               Text(
-                name,
+                widget.name,
                 style: BgaTextStyle.titleBoldText,
               ),
               const Spacer(),
               InkWell(
-                onTap: onTap,
-                child: Text(
-                  isChecked.toString(),
-                  style: BgaTextStyle.subtitleText,
+                onTap: widget.onTap,
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 8),
+                  decoration: BoxDecoration(
+                    color: labelBackgroundColor,
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  child: Text(
+                    widget.label,
+                    style: BgaTextStyle.subtitleText,
+                  ),
                 ),
               ),
             ],
           ),
         ),
         subtitle: Padding(
-          padding: BgaPaddingSize.getPaddingNikInCheckIn(),
+          padding: EdgeInsets.only(top: 8, bottom: 4),
           child: Row(
             children: <Widget>[
               Text(
                 "NIK  ",
-                style: BgaTextStyle.titleNormalText,
+                style: BgaTextStyle.titleBoldText,
               ),
               Text(
-                nik,
-                style: BgaTextStyle.titleNormalText,
+                widget.nik,
+                style: BgaTextStyle.subtitleText,
               ),
               const Spacer(),
-              Text(
-                DateFormat('HH:mm').format(DateTime.now()).toString(),
-                style: BgaTextStyle.subtitleBoldText,
+              Container(
+                decoration: BoxDecoration(
+                  color: labelBackgroundColor,
+                  borderRadius: BorderRadiusStyle.bgaroundedBorder15, // Mengatur radius background
+                ),
+                child: Text(
+                  widget.checkinTime,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: BgaColor.bgaBlack900,
+                  ),
+                ),
               ),
-              IconButton(
-                icon: Icon(Icons.edit),
-                onPressed: () {
-                  // Aksi ketika tombol pensil di klik
-                  // Tambahkan logika untuk menampilkan kolom catatan
-                },
-              ),
+
+              if (widget.isCheckout) // Tampilkan kolom komentar hanya jika isCheckout bernilai true
+                IconButton(
+                  icon: Icon(Icons.edit),
+                  onPressed: () {
+                    _showCommentDialog();
+                  },
+                ),
             ],
           ),
         ),
-        onTap: onTap,
-        trailing: notes != null && notes!.isNotEmpty
+        onTap: widget.onTap,
+        trailing: _notes != null && _notes!.isNotEmpty
             ? Column(
           children: [
             const Divider(),
@@ -397,11 +355,11 @@ class CustomCardCheck extends StatelessWidget {
               child: ListTile(
                 title: Text(
                   "Catatan:",
-                  style: BgaTextStyle.titleBoldText,
+                  style: BgaTextStyle.subtitleText,
                 ),
                 subtitle: Text(
-                  notes!,
-                  style: BgaTextStyle.titleNormalText,
+                  _notes!,
+                  style:  BgaTextStyle.subtitleText,
                 ),
               ),
             ),
@@ -411,5 +369,40 @@ class CustomCardCheck extends StatelessWidget {
       ),
     );
   }
-}
 
+  void _showCommentDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Tambahkan Komentar'),
+          content: TextField(
+            onChanged: (value) {
+              setState(() {
+                _notes = value;
+              });
+            },
+            decoration: InputDecoration(
+              hintText: 'Masukkan komentar...',
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Batal'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text('Simpan'),
+              onPressed: () {
+
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+}

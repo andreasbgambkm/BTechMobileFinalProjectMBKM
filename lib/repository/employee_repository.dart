@@ -110,13 +110,13 @@ class EmployeeRepository {
   }
 
 
-  Future<CheckInModel> insertCheckIn(String nik, String name, int isCheckedIn, String checkinTime) async {
+  Future<CheckInModel> insertCheckIn(String nik, String name, int isCheckedIn, String checkInTime) async {
     final db = await open();
     final checkIn = CheckInModel(
       nik: nik,
       name: name,
       isCheckedIn: isCheckedIn,
-      checkinTime: checkinTime,
+      checkInTime: checkInTime,
     );
     checkIn.id = await db.insert(checkInTableName, checkIn.toMap());
     return checkIn;

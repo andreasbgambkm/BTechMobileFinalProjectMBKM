@@ -57,6 +57,7 @@ class CheckInRepository {
   Future<List<CheckInModel>> getAllSuccessfulCheckIns() async {
     final db = await _getDb();
     final maps = await db.query(tableName, where: 'isCheckedIn = ?', whereArgs: [1]);
+    print(maps);
     return List.generate(maps.length, (i) {
       final checkIn = CheckInModel.fromMap(maps[i]);
       return checkIn;
@@ -103,13 +104,13 @@ class CheckInRepository {
     return null;
   }
   // Insert CheckIn baru
-  Future<CheckInModel> insertCheckIn(String nik, String name, int isCheckedIn, String checkinTime) async {
+  Future<CheckInModel> insertCheckIn(String nik, String name, int isCheckedIn, String checkInTime) async {
     final db = await openCheckIn();
     final checkIn = CheckInModel(
       nik: nik,
       name: name,
       isCheckedIn: isCheckedIn,
-      checkinTime: checkinTime,
+      checkInTime: checkInTime,
     );
     checkIn.id = await db.insert(tableName, checkIn.toMap());
     return checkIn;

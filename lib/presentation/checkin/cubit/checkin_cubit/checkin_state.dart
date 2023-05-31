@@ -1,6 +1,7 @@
+
 part of 'checkin_cubit.dart';
 
-class CheckInState extends Equatable {
+abstract class CheckInState extends Equatable {
   final bool isLoading;
   final bool isSuccess;
   final bool isEmpty;
@@ -17,61 +18,6 @@ class CheckInState extends Equatable {
     required this.checkInCount,
   });
 
-  factory CheckInState.initial() {
-    return const CheckInState(
-      isLoading: false,
-      isSuccess: false,
-      isEmpty: true,
-      error: '',
-      checkInList: [],
-      checkInCount: 0,
-    );
-  }
-
-  factory CheckInState.loading() {
-    return const CheckInState(
-      isLoading: true,
-      isSuccess: false,
-      isEmpty: true,
-      error: '',
-      checkInList: [],
-      checkInCount: 0,
-    );
-  }
-
-  factory CheckInState.success(List<CheckInModel> checkIns) {
-    return CheckInState(
-      isLoading: false,
-      isSuccess: true,
-      isEmpty: checkIns.isEmpty,
-      error: '',
-      checkInList: checkIns,
-      checkInCount: checkIns.length,
-    );
-  }
-
-  factory CheckInState.empty() {
-    return const CheckInState(
-      isLoading: false,
-      isSuccess: false,
-      isEmpty: true,
-      error: '',
-      checkInList: [],
-      checkInCount: 0,
-    );
-  }
-
-  factory CheckInState.failure(String error) {
-    return CheckInState(
-      isLoading: false,
-      isSuccess: false,
-      isEmpty: true,
-      error: error,
-      checkInList: [],
-      checkInCount: 0,
-    );
-  }
-
   @override
   List<Object?> get props => [
     isLoading,
@@ -83,29 +29,9 @@ class CheckInState extends Equatable {
   ];
 }
 
-class CheckInInitial extends CheckInState {
-  const CheckInInitial() : super(
-    isLoading: false,
-    isSuccess: false,
-    isEmpty: true,
-    error: '',
-    checkInList: const [],
-    checkInCount: 0,
-  );
-
-  @override
-  List<Object> get props => [
-    isLoading,
-    isSuccess,
-    isEmpty,
-    error,
-    checkInList,
-    checkInCount,
-  ];
-}
-
 class CheckInLoading extends CheckInState {
-  const CheckInLoading() : super(
+  const CheckInLoading()
+      : super(
     isLoading: true,
     isSuccess: false,
     isEmpty: true,
@@ -115,39 +41,26 @@ class CheckInLoading extends CheckInState {
   );
 
   @override
-  List<Object> get props => [
-    isLoading,
-    isSuccess,
-    isEmpty,
-    error,
-    checkInList,
-    checkInCount,
-  ];
+  List<Object?> get props => super.props;
 }
 
 class CheckInSuccess extends CheckInState {
-  const CheckInSuccess(List<CheckInModel> checkIns) : super(
+  CheckInSuccess(List<CheckInModel> checkIns) : super(
     isLoading: false,
     isSuccess: true,
-    isEmpty: false,
+    isEmpty: checkIns.isEmpty,
     error: '',
     checkInList: checkIns,
     checkInCount: checkIns.length,
   );
 
   @override
-  List<Object> get props => [
-    isLoading,
-    isSuccess,
-    isEmpty,
-    error,
-    checkInList,
-    checkInCount,
-  ];
+  List<Object?> get props => super.props;
 }
 
 class CheckInEmpty extends CheckInState {
-  const CheckInEmpty() : super(
+  const CheckInEmpty()
+      : super(
     isLoading: false,
     isSuccess: false,
     isEmpty: true,
@@ -157,18 +70,12 @@ class CheckInEmpty extends CheckInState {
   );
 
   @override
-  List<Object> get props => [
-    isLoading,
-    isSuccess,
-    isEmpty,
-    error,
-    checkInList,
-    checkInCount,
-  ];
+  List<Object?> get props => super.props;
 }
 
 class CheckInFailure extends CheckInState {
-  const CheckInFailure(String error) : super(
+  const CheckInFailure(String error)
+      : super(
     isLoading: false,
     isSuccess: false,
     isEmpty: true,
@@ -178,12 +85,5 @@ class CheckInFailure extends CheckInState {
   );
 
   @override
-  List<Object> get props => [
-    isLoading,
-    isSuccess,
-    isEmpty,
-    error,
-    checkInList,
-    checkInCount,
-  ];
+  List<Object?> get props => super.props;
 }

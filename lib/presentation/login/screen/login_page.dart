@@ -1,10 +1,10 @@
 import 'package:BTechApp_Final_Project/core/utils/color_pallete.dart';
 import 'package:BTechApp_Final_Project/core/utils/theme/app_decoration.dart';
 import 'package:BTechApp_Final_Project/presentation/login/cubit/state.dart';
+import 'package:BTechApp_Final_Project/repository/attendance_repository.dart';
 import 'package:BTechApp_Final_Project/repository/checkin_repository.dart';
 import 'package:BTechApp_Final_Project/repository/checkout_repository.dart';
 import 'package:BTechApp_Final_Project/repository/employee_repository.dart';
-
 import 'package:BTechApp_Final_Project/widgets/custom_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -61,8 +61,7 @@ class _LoginViewState extends State<LoginView> {
                             const SnackBar(content: Text('Login Success')),
                           );
                         // Navigate to home page
-                        Navigator.pushReplacementNamed(context, '/home',
-                            arguments: state.loginData.user);
+                        Navigator.pushReplacementNamed(context, '/home', arguments: state.loginData.user);
                       } else if (state is LoginFailure) {
                         ScaffoldMessenger.of(context)
                           ..hideCurrentSnackBar()
@@ -140,10 +139,12 @@ class _LoginViewState extends State<LoginView> {
                                 final EmployeeRepository _employeeRepository =EmployeeRepository();
                                 final CheckInRepository _checkInRepository = CheckInRepository();
                                 final CheckOutRepository _checkOutRepository = CheckOutRepository();
+                                final AttendanceRepository _attendanceRepository = AttendanceRepository();
                                 await _employeeRepository.open();
                                 await _employeeRepository.injectFromJson();
                                 await _checkInRepository.openCheckIn();
                                 await _checkOutRepository.openCheckOut();
+                                await _attendanceRepository.openAttendance();
                                 final username = _usernameController.text;
                                 final password = _passwordController.text;
                                 context.read<LoginCubit>().performLogin(username, password);

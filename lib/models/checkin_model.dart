@@ -3,14 +3,14 @@ class CheckInModel {
   String nik;
   String name;
   int isCheckedIn;
-  String? checkinTime;
+  String checkInTime;
 
   CheckInModel({
     this.id,
     required this.nik,
     required this.name,
     this.isCheckedIn = 0,
-    this.checkinTime,
+    required this.checkInTime,
   });
 
   // konversi dari objek CheckIn menjadi Map
@@ -20,7 +20,7 @@ class CheckInModel {
       'nik': nik,
       'name': name,
       'isCheckedIn': isCheckedIn,
-      'checkinTime': checkinTime,
+      'checkInTime': checkInTime,
     };
   }
 
@@ -31,11 +31,9 @@ class CheckInModel {
       nik: map['nik'],
       name: map['name'],
       isCheckedIn: map['isCheckedIn'],
-      checkinTime: map['checkinTime'],
+      checkInTime: map['checkInTime'],
     );
   }
-
-
 
   }
 

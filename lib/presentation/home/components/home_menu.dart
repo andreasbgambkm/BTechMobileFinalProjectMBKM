@@ -1,11 +1,25 @@
 import 'package:BTechApp_Final_Project/presentation/checkin/cubit/checkin_cubit/checkin_cubit.dart';
+import 'package:BTechApp_Final_Project/repository/checkin_repository.dart';
 import 'package:BTechApp_Final_Project/widgets/custom_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class HomeMenu extends StatelessWidget {
+class HomeMenu extends StatefulWidget {
   const HomeMenu({Key? key}) : super(key: key);
 
+  @override
+  State<HomeMenu> createState() => _HomeMenuState();
+}
+
+class _HomeMenuState extends State<HomeMenu> {
+
+  int checkInCounter = 0;
+  final CheckInRepository checkInRepository = CheckInRepository();
+
+  @override
+  void initState() {
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -38,4 +52,6 @@ class HomeMenu extends StatelessWidget {
       ],
     );
   }
+
+
 }

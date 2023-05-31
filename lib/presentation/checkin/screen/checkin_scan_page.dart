@@ -2,7 +2,6 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:BTechApp_Final_Project/core/utils/color_pallete.dart';
 import 'package:BTechApp_Final_Project/core/utils/theme/app_decoration.dart';
-import 'package:BTechApp_Final_Project/models/checkin_model.dart';
 import 'package:BTechApp_Final_Project/presentation/checkin/cubit/checkin_cubit/checkin_cubit.dart';
 import 'package:BTechApp_Final_Project/presentation/checkin/cubit/checkin_scan_cubit/scan_checkin_cubit.dart';
 import 'package:BTechApp_Final_Project/repository/checkin_repository.dart';
@@ -208,81 +207,71 @@ class _QRScannerState extends State<QRScanner> {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
-        return BlocBuilder<QRScannerCubit, QRScannerState>(
-          builder: (context, state) {
-            return Container(
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.vertical(
-                  top: Radius.circular(50.0),
+        return BlocProvider<QRScannerCubit>.value(
+          value: context.read<QRScannerCubit>(),
+          child: BlocBuilder<QRScannerCubit, QRScannerState>(
+            builder: (context, state) {
+              return Container(
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(50.0),
+                  ),
                 ),
-              ),
-              child: Padding(
-                padding: BgaPaddingSize.getPaddingBottomSheetAll(),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    ListTile(
-                      leading: Icon(Icons.info_outline),
-                      title: Text('Barcode Type: $barcodeType'),
-                    ),
-                    ListTile(
-                      leading: Icon(Icons.code),
-                      title: Text('${employee['nik']} - ${employee['name']}'),
-                    ),
-                    DropdownButton<String>(
-                      value: 'Option 1',
-                      items: [
-                        DropdownMenuItem(
-                          value: 'Option 1',
-                          child: Text('Wajah Tidak Terdaftar'),
-                        ),
-                        DropdownMenuItem(
-                          value: 'Option 2',
-                          child: Text('Wajah Tidak Terdeteksi'),
-                        ),
-                        DropdownMenuItem(
-                          value: 'Option 3',
-                          child: Text('Wajah Terlalu Tampan'),
-                        ),
-                      ],
-                      onChanged: (value) {
-                        context.read<QRScannerCubit>().selectOption(value!);
-                      },
-                      hint: Text('Select an option'),
-                      isExpanded: true,
-                    ),
+                child: Padding(
+                  padding: BgaPaddingSize.getPaddingBottomSheetAll(),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      ListTile(
+                        leading: Icon(Icons.info_outline),
+                        title: Text('Barcode Type: $barcodeType'),
+                      ),
+                      ListTile(
+                        leading: Icon(Icons.code),
+                        title: Text('${employee['nik']} - ${employee['name']}'),
+                      ),
+                      DropdownButton<String>(
+                        value: 'Option 1',
+                        items: [
+                          DropdownMenuItem(
+                            value: 'Option 1',
+                            child: Text('Wajah Tidak Terdaftar'),
+                          ),
+                          DropdownMenuItem(
+                            value: 'Option 2',
+                            child: Text('Wajah Tidak Terdeteksi'),
+                          ),
+                          DropdownMenuItem(
+                            value: 'Option 3',
+                            child: Text('Wajah Terlalu Tampan'),
+                          ),
+                        ],
+                        onChanged: (value) {
+                          context.read<QRScannerCubit>().selectOption(value!);
+                        },
+                        hint: Text('Select an option'),
+                        isExpanded: true,
+                      ),
 
-                    SizedBox(height: BgaSizedboxSize.getSizedBoxMaxHeight()),
-                    BgaButton(
-                      text: 'Lanjutkan',
-                      onPressed: () async {
-                        final now = DateTime.now();
-                        final formattedTime = DateFormat('HH:mm').format(now);
-                        context.read<CheckInCubit>().getAllSuccessfulCheckedIn();
-                        await employee_checkin.insertCheckIn(nik, name, 1, formattedTime);
-
-                        final checkIn = CheckInModel(
-                          name: name,
-                          nik: nik,
-                          isCheckedIn: 1,
-                          checkInTime: formattedTime,
-                        );
-                        context.read<CheckInCubit>().addCheckIn(checkIn);
-
-                        context.read<CheckInCubit>().refresh();
-                        Navigator.pop(context);
-                        print('checkInList: ${context.read<CheckInCubit>().state.checkInList}');
-
-                        _startCamera();
-                      },
-                    ),
-
-                  ],
+                      SizedBox(height: BgaSizedboxSize.getSizedBoxMaxHeight()),
+                      BgaButton(
+                        text: 'Lanjutkan',
+                        onPressed: () async {
+                          final now = DateTime.now();
+                          final formattedTime = DateFormat('HH:mm').format(now);
+                          context.read<CheckInCubit>().getAllSuccessfulCheckedIn();
+                          await employee_checkin.insertCheckIn(nik, name, 1, formattedTime);
+                          Navigator.pop(context);
+                          _startCamera();
+                        },
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            );
-          },
+              );
+            },
+          ),
         );
       },
     );

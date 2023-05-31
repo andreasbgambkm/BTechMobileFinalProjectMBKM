@@ -3,6 +3,7 @@ import 'package:BTechApp_Final_Project/core/utils/constant.dart';
 import 'package:BTechApp_Final_Project/core/utils/theme/app_decoration.dart';
 import 'package:BTechApp_Final_Project/presentation/checkin/cubit/checkin_cubit/checkin_cubit.dart';
 import 'package:BTechApp_Final_Project/presentation/checkin/cubit/checkin_scan_cubit/scan_checkin_cubit.dart';
+import 'package:BTechApp_Final_Project/widgets/custom_alert.dart';
 import 'package:BTechApp_Final_Project/widgets/custom_appbar.dart';
 import 'package:BTechApp_Final_Project/widgets/custom_button.dart';
 import 'package:BTechApp_Final_Project/widgets/custom_card.dart';
@@ -62,22 +63,17 @@ class _CheckInPageState extends State<CheckInPage> {
       body: BlocListener<QRScannerCubit, QRScannerState>(
         listener: (context, state) {
           if (state is QRScannerSuccess) {
-            showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return AlertDialog(
-                  title: Text('Check-In Berhasil'),
-                  content: Text('Pekerja dengan NIK ${state.employee.nik} - ${state.employee.name} berhasil check-in.'),
-                  actions: [
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      child: Text('OK'),
-                    ),
-                  ],
-                );
-              },
+
+            CustomAlertDialogSuccess.show(context: context,
+                title: 'Check-In Berhasil',
+                content: 'Pekerja dengan NIK ${state.employee.nik} - ${state.employee.name} berhasil check-in.',
+                buttonText: 'OK',
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+
+
+
             );
             context.read<CheckInCubit>().getAllSuccessfulCheckedIn();
           }

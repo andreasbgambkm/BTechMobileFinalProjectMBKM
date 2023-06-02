@@ -60,21 +60,20 @@ class _CheckInPageState extends State<CheckInPage> {
     return Scaffold(
       backgroundColor: BgaColor.bgaBodyColor,
       appBar: CustomAppBar(title: appBarTitleOnEmployeeList),
-      body: BlocListener<QRScannerCubit, QRScannerState>(
+      body: BlocListener<ScanCheckinCubit, ScanCheckinState>(
         listener: (context, state) {
-          if (state is QRScannerSuccess) {
-
-            CustomAlertDialogSuccess.show(context: context,
-                title: 'Check-In Berhasil',
-                content: 'Pekerja dengan NIK ${state.employee.nik} - ${state.employee.name} berhasil check-in.',
-                buttonText: 'OK',
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-
-
-
+          if (state is ScanCheckinSuccess) {
+            showDialog(context: context,
+                builder: (BuildContext context){
+                  return BgaCustomAlert(
+                    title: 'Check-In Berhasil',
+                    descriptions: 'Pekerja dengan NIK ${state.employee.nik} - ${state.employee.name} berhasil check-in.',
+                    text: "OK",
+                    img: Image.asset(imageAlertSuccess),
+                  );
+                }
             );
+
             context.read<CheckInCubit>().getAllSuccessfulCheckedIn();
           }
         },
@@ -154,15 +153,19 @@ class _CheckInPageState extends State<CheckInPage> {
                         itemCount: state.checkInList.length,
                         itemBuilder: (context, index) {
                           final checkIn = state.checkInList[index];
-                          return CustomCardCheck(
-                            name: checkIn.name,
-                            label: 'Check In',
-                            onTap: () {},
-                            nik: checkIn.nik,
-                            checkinTime: checkIn.checkInTime,
-                            isCheckout: false,
+                          return Padding(
+                            padding: BgaPaddingSize.getPaddingBottom8(),
+                            child: CustomCardCheck(
+                              name: checkIn.name,
+                              label: 'Check In',
+                              onTap: () {},
+                              nik: checkIn.nik,
+                              checkinTime: checkIn.checkInTime,
+                              isCheckout: false,
+                            ),
                           );
                         },
+
                       );
                     } else {
                       return Container(

@@ -1,8 +1,6 @@
-
 import 'package:BTechApp_Final_Project/core/utils/color_pallete.dart';
 import 'package:BTechApp_Final_Project/data/login_data.dart';
 import 'package:BTechApp_Final_Project/presentation/login/cubit/cubit.dart';
-import 'package:BTechApp_Final_Project/repository/employee_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 

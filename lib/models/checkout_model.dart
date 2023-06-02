@@ -3,16 +3,16 @@ class CheckOutModel {
   String nik;
   String name;
   int isCheckedOut;
-  String? checkoutTime;
-  String? note;
+  String checkoutTime;
+  String note;
 
   CheckOutModel({
-    this.id,
+   this.id,
     required this.nik,
     required this.name,
     this.isCheckedOut = 0,
-    this.checkoutTime,
-    this.note
+    required this.checkoutTime,
+    this.note =''
 
   });
 

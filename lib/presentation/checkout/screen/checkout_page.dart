@@ -1,7 +1,8 @@
 import 'package:BTechApp_Final_Project/core/utils/color_pallete.dart';
 import 'package:BTechApp_Final_Project/core/utils/constant.dart';
 import 'package:BTechApp_Final_Project/core/utils/theme/app_decoration.dart';
-import 'package:BTechApp_Final_Project/presentation/checkout/cubit/checkout_cubit/checkout_cubit_cubit.dart';
+import 'package:BTechApp_Final_Project/presentation/checkout/cubit/checkout_cubit/checkout_cubit.dart';
+import 'package:BTechApp_Final_Project/repository/checkout_repository.dart';
 import 'package:BTechApp_Final_Project/widgets/custom_appbar.dart';
 import 'package:BTechApp_Final_Project/widgets/custom_button.dart';
 import 'package:BTechApp_Final_Project/widgets/custom_card.dart';
@@ -21,10 +22,31 @@ class CheckOutPage extends StatefulWidget {
 }
 class _CheckOutPageState extends State<CheckOutPage> {
   final String routeName = "/checkout_scanner";
+  late final CheckOutCubit checkOutCubit;
+
+
+  void printCheckOuts() {
+    checkOutCubit.stream.listen((state) {
+      if (state is CheckOutSuccess) {
+        print('Successful Check-Outs:');
+        state.checkoutList.forEach((checkOut) {
+          print('Name: ${checkOut.name}');
+          print('NIK: ${checkOut.nik}');
+          print('Check-Out Time: ${checkOut.checkoutTime}');
+          print('Notes: ${checkOut.note}');
+          print('---');
+        });
+      } else if (state is CheckOutLoading) {
+        print('Loading...');
+      }
+    });
+  }
   @override
   void initState() {
     super.initState();
-    ;
+    checkOutCubit = context.read<CheckOutCubit>();
+    checkOutCubit.getAllSuccessfulCheckedOut();
+    printCheckOuts();
   }
 
   @override
@@ -63,7 +85,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
                     },
                     builder: (context, state) {
                       return Text(
-                        "${state.CheckOutCount} $counterAttendanceOnEmployeeList",
+                        "${state.checkoutCount} $counterAttendanceOnEmployeeList",
                         style: BgaTextStyle.titleBoldText,
                       );
                     },
@@ -110,18 +132,19 @@ class _CheckOutPageState extends State<CheckOutPage> {
                     );
                   } else {
                     return ListView.builder(
-                      itemCount: state.CheckOutCount,
+                      itemCount: state.checkoutCount,
                       itemBuilder: (context, index) {
-                        final CheckOut = state.CheckOutList[index];
-                        return CustomCardCheck(
+                        final CheckOut = state.checkoutList[index];
 
+                        return CustomCardCheck(
+                          id: CheckOut.id,
                           name: CheckOut.name,
-                         label: 'Check Out',
+                          label: 'Check Out',
                           onTap: () {},
                           nik: CheckOut.nik,
                           notes: CheckOut.note,
                           isCheckout: true,
-                          checkinTime: '',
+                          checkinTime: CheckOut.checkoutTime,
                         );
                       },
                     );
@@ -132,7 +155,9 @@ class _CheckOutPageState extends State<CheckOutPage> {
             SizedBox(height: BgaSizedboxSize.getSizedBoxMidHeight()),
             BgaButton(
               text: buttonPrint,
-              onPressed: () {},
+              onPressed: () async {
+
+              },
             ),
           ],
         ),

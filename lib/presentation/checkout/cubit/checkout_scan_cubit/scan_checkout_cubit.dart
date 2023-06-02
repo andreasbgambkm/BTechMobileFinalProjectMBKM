@@ -1,58 +1,59 @@
 import 'package:BTechApp_Final_Project/models/employee_model.dart';
-import 'package:BTechApp_Final_Project/repository/checkin_repository.dart';
+import 'package:BTechApp_Final_Project/repository/checkout_repository.dart';
 import 'package:BTechApp_Final_Project/repository/employee_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 
-part 'scan_checkin_state.dart';
+part 'scan_checkout_state.dart';
 
-class ScanCheckinCubit extends Cubit<ScanCheckinState> {
-  ScanCheckinCubit() : super(ScanCheckinInitial());
+class ScanCheckoutCubit extends Cubit<ScanCheckoutState> {
+  ScanCheckoutCubit() : super(ScanCheckoutInitial());
 
 
 
   void onQRScanned(String barcodeType, String data, BuildContext context) async {
-    emit(ScanCheckinLoading());
+    emit(ScanCheckoutLoading());
 
     List<String> qrData = data.split('|');
     if (qrData.length < 2 || qrData[0].isEmpty || qrData[1].isEmpty) {
-      emit(ScanCheckinError('QR atau barcode yang discan tidak valid.'));
+      emit(ScanCheckoutError('QR atau barcode yang discan tidak valid.'));
       return;
     }
     String nik = qrData[0];
     String name = qrData[1];
+    String? note;
 
     int isCheckedIn = 1;
 
     final employeeData = await EmployeeRepository().findEmployeeByNik(nik, name);
-    final employeeCheckin = CheckInRepository();
+    final employeecheckout = CheckOutRepository();
     final int? id = 0;
 
     if (employeeData == null) {
-      emit(ScanCheckinError('Data tidak ditemukan.'));
+      emit(ScanCheckoutError('Data tidak ditemukan.'));
       return;
     }
 
     final Employee employee = Employee.fromMap(employeeData);
 
-    final existingCheckIn = await employeeCheckin.findEmployeeIsCheckedInByNik(nik, name, isCheckedIn);
+    final existingcheckout = await employeecheckout.findEmployeeIsCheckedOutByNik(nik, name);
 
-    if (existingCheckIn != null) {
-      emit(ScanCheckinError('Karyawan dengan NIK $nik - $name sudah melakukan check-in sebelumnya.'));
+    if (existingcheckout != null) {
+      emit(ScanCheckoutError('Karyawan dengan NIK $nik - $name sudah melakukan check-in sebelumnya.'));
       return;
     }
 
     try {
       final now = DateTime.now();
       final formattedTime = DateFormat('HH:mm').format(now);
-      await employeeCheckin.insertCheckIn(nik, name, 1, formattedTime);
-      emit(ScanCheckinSuccess(barcodeType, data, employee));
+      await employeecheckout.insertCheckOut(nik, name, 1, formattedTime,note!);
+      emit(ScanCheckoutSuccess(barcodeType, data, employee));
 
 
     } catch (error) {
-      emit(ScanCheckinError('Gagal melakukan check-in.'));
+      emit(ScanCheckoutError('Gagal melakukan check-in.'));
     }
   }
 

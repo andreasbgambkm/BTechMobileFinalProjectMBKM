@@ -49,6 +49,7 @@ dependencies:
   easy_permission_validator: ^4.0.0
   sqflite: ^2.2.8+1
   vibration: ^1.7.7
+  tip_dialog: ^4.0.0
 
 
 

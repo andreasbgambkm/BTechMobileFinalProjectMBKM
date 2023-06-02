@@ -78,7 +78,7 @@ class BorderRadiusStyle {
 
   static BorderRadius roundedBorder5 = BorderRadius.circular(5
   );
-
+  static BorderRadius bgaAvatarRadius45 = BorderRadius.circular(45);
   static BorderRadius bgaroundedBorder15 = BorderRadius.circular(15);
 
   static BorderRadius roundedBorder10 = BorderRadius.circular(10.0);
@@ -201,9 +201,17 @@ class BgaTextStyle {
     color: BgaColor.bgaWhiteA700,
 
   );
+
+  static TextStyle alertTitleBold = TextStyle(
+    fontSize: 24.0,
+    fontWeight: FontWeight.bold,
+    fontFamily: 'Poppins',
+    color: BgaColor.bgaWhiteA700,
+  );
 }
 
 class BgaPaddingSize {
+
   static const double bgaTopPadding = 18.0;
   static const double bgaLeftPadding = 20.0;
   static const double bgaTopCardRkhPadding = 11.0;
@@ -216,9 +224,18 @@ class BgaPaddingSize {
   static const double bgaRowPadding= 11.0;
   static const double bgaNikPaddingTop = 18.0;
   static const double bgaNikPaddingBottom = 8.0;
+  static const double bgaTopPaddingAvatarAlert = 45.0;
 
+
+  static EdgeInsets getPaddingTopAlertMargin(){
+    return const EdgeInsets.only(top: 60.0);
+  }
   static EdgeInsets getPaddingBottomSheetAll(){
     return const EdgeInsets.all(16.0);
+  }
+
+  static EdgeInsets getPaddingAlertButton(){
+    return const EdgeInsets.all(20.0);
   }
 
   static EdgeInsets getPaddingBody() {
@@ -251,7 +268,17 @@ class BgaPaddingSize {
   static EdgeInsets getBgaPaddingSymmHorizontal13(){
     return const EdgeInsets.symmetric(vertical: 13.0);
   }
+  static EdgeInsets getBgaPaddingSymmHorizontal10(){
+    return const EdgeInsets.symmetric(vertical: 10.0);
+  }
 
+
+  static EdgeInsets getBgaPaddingBackgroundColorCheckinTime(){
+    return const EdgeInsets.symmetric(vertical: 4, horizontal: 8);
+  }
+  static EdgeInsets getPaddingBottom8() {
+    return const EdgeInsets.only( bottom: 8);
+  }
 }
 
 class BgaIconSize{
@@ -276,6 +303,9 @@ class BgaSizedboxSize{
     return 10;
   }
 
+  static double getSizedBoxAlertHeight(){
+    return 30;
+  }
 
   static double getSizedBoxMaxHeight(){
     return 15;

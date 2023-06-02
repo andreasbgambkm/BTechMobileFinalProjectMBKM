@@ -19,14 +19,14 @@ class CheckOutRepository {
             nik TEXT,
             name TEXT,
             isCheckedOut INTEGER,
-            CheckOutTime TEXT,
+            checkoutTime TEXT,
             notes TEXT, 
             FOREIGN KEY (nik) REFERENCES Employees(nik)
           )
           '''
         );
       },
-      version: 2,
+      version: 5,
     );
   }
 
@@ -49,7 +49,7 @@ class CheckOutRepository {
       onCreate: (db, version) async {
         await createCheckOutTable();
       },
-      version: 8,
+      version: 9,
     );
     return db;
   }
@@ -74,6 +74,8 @@ class CheckOutRepository {
     return openDatabase(
       databasePath,
       onCreate: (db, version) {
+
+
         return db.execute(
           '''
           CREATE TABLE IF NOT EXISTS $tableName(
@@ -81,7 +83,7 @@ class CheckOutRepository {
             nik TEXT,
             name TEXT,
             isCheckedOut INTEGER,
-            CheckOutTime TEXT,
+            checkoutTime TEXT,
             note TEXT,
             FOREIGN KEY (nik) REFERENCES Employees(nik)
           )
@@ -92,12 +94,12 @@ class CheckOutRepository {
     );
   }
 
-  Future<Map<String, dynamic>?> findEmployeeIsCheckedOutByNik(String nik, String name, int isCheckedOut) async {
+  Future<Map<String, dynamic>?> findEmployeeIsCheckedOutByNik(String nik, String name) async {
     final Database db = await _getDb() ;
     final List<Map<String, dynamic>> maps = await db.query(
       CheckOutRepository.tableName,
-      where: "nik = ? AND name = ? AND isCheckedOut = ?",
-      whereArgs: [nik, name, isCheckedOut],
+      where: "nik = ? AND name = ?",
+      whereArgs: [nik, name],
     );
     if (maps.isNotEmpty) {
       return maps.first;
@@ -130,5 +132,20 @@ class CheckOutRepository {
     );
   }
 
+  //updatenote
+  Future<void> updateCheckOutNote(int id, String note) async {
+    final db = await _getDb();
+    await db.update(
+      tableName,
+      {'note': note},
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
+
+  Future<void> deleteAllCheckOut() async {
+    final db = await _getDb();
+    await db.delete(tableName, where: '1');
+  }
 }
 

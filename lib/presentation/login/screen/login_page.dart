@@ -144,6 +144,7 @@ class _LoginViewState extends State<LoginView> {
                                 await _employeeRepository.injectFromJson();
                                 await _checkInRepository.openCheckIn();
                                 await _checkOutRepository.openCheckOut();
+
                                 await _attendanceRepository.openAttendance();
                                 final username = _usernameController.text;
                                 final password = _passwordController.text;

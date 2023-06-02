@@ -1,29 +1,34 @@
-
 part of 'scan_checkin_cubit.dart';
 
-abstract class QRScannerState {
+abstract class ScanCheckinState extends Equatable {
+  const ScanCheckinState();
 
+  @override
+  List<Object> get props => [];
 }
 
-class QRScannerInitial extends QRScannerState {}
+class ScanCheckinInitial extends ScanCheckinState {}
 
-class QRScannerLoading extends QRScannerState {}
-
-class QRScannerSuccess extends QRScannerState {
-  final Employee employee;
+class ScanCheckinLoading extends ScanCheckinState {}
+class ScanCheckinSuccess extends ScanCheckinState {
   final String barcodeType;
+  final String data;
+  final Employee employee; // Tambahkan atribut employee
 
-  QRScannerSuccess(this.employee, this.barcodeType);
+  ScanCheckinSuccess(this.barcodeType, this.data, this.employee);
 }
 
-class QRScannerError extends QRScannerState {
+class ScanCheckinError extends ScanCheckinState {
   final String errorMessage;
 
-  QRScannerError(this.errorMessage);
+  ScanCheckinError(this.errorMessage);
 }
 
-class QRScannerSelectOption extends QRScannerState{
+class CameraState extends ScanCheckinState {
+  final bool isCameraOpen;
 
-  final String selectedOption;
-  QRScannerSelectOption(this.selectedOption);
+  const CameraState(this.isCameraOpen);
+
+  @override
+  List<Object> get props => [isCameraOpen];
 }

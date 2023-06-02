@@ -8,6 +8,7 @@ import 'package:path/path.dart';
 class EmployeeRepository {
   static const String employeeTableName = 'Employees';
   static const String checkInTableName = 'CheckIn';
+  static const String checkOutTableName = 'CheckOut';
 
   Future<Database> open() async {
     final dbPath = await getDatabasesPath();
@@ -42,6 +43,18 @@ class EmployeeRepository {
           checkInTime TEXT,
           FOREIGN KEY (nik) REFERENCES Employees(nik)
         )
+      ''');
+
+        db.execute('''
+         CREATE TABLE IF NOT EXISTS $checkOutTableName(
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            nik TEXT,
+            name TEXT,
+            isCheckedOut INTEGER,
+            checkoutTime TEXT,
+            note TEXT,
+            FOREIGN KEY (nik) REFERENCES Employees(nik)
+            )
       ''');
 
 

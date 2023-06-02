@@ -4,8 +4,10 @@ import 'package:BTechApp_Final_Project/data/login_data.dart';
 import 'package:BTechApp_Final_Project/presentation/checkin/cubit/checkin_scan_cubit/scan_checkin_cubit.dart';
 import 'package:BTechApp_Final_Project/presentation/checkin/screen/checkin_page.dart';
 import 'package:BTechApp_Final_Project/presentation/checkin/screen/checkin_scan_page.dart';
-import 'package:BTechApp_Final_Project/presentation/checkout/cubit/checkout_cubit/checkout_cubit_cubit.dart';
+import 'package:BTechApp_Final_Project/presentation/checkout/cubit/checkout_cubit/checkout_cubit.dart';
+import 'package:BTechApp_Final_Project/presentation/checkout/cubit/checkout_scan_cubit/scan_checkout_cubit.dart';
 import 'package:BTechApp_Final_Project/presentation/checkout/screen/checkout_page.dart';
+import 'package:BTechApp_Final_Project/presentation/checkout/screen/checkout_scan_page.dart';
 import 'package:BTechApp_Final_Project/presentation/home/screen/home_page.dart';
 import 'package:BTechApp_Final_Project/presentation/login/cubit/cubit.dart';
 import 'package:BTechApp_Final_Project/presentation/login/screen/login_page.dart';
@@ -15,6 +17,7 @@ import 'presentation/checkin/cubit/checkin_cubit/checkin_cubit.dart';
 
 void main() {
   runApp(MyApp());
+
 }
 class MyApp extends StatelessWidget {
   @override
@@ -24,7 +27,8 @@ class MyApp extends StatelessWidget {
         BlocProvider<LoginCubit>(create: (context) => LoginCubit()),
         BlocProvider<CheckInCubit>(create: (context) => CheckInCubit()),
         BlocProvider<CheckOutCubit>(create: (context)=> CheckOutCubit()),
-        BlocProvider<QRScannerCubit>(create: (context) => QRScannerCubit()),
+        BlocProvider<ScanCheckinCubit>(create: (context) => ScanCheckinCubit()),
+        BlocProvider<ScanCheckoutCubit>(create: (context) => ScanCheckoutCubit()),
       ],
       child: MaterialApp(
         title: 'SPARTA (Sistem Perkebunan Area Bumitama)',
@@ -43,6 +47,7 @@ class MyApp extends StatelessWidget {
           '/checkin': (context) => const CheckInPage(),
           '/checkin_scanner': (context) => const QRScanner(),
           '/checkout': (context) => const CheckOutPage(),
+          '/checkout_scanner': (context) => const QRScannerCheckOut(),
         },
       ),
     );

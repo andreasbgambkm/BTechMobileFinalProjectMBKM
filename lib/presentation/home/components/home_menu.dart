@@ -1,4 +1,6 @@
+import 'package:BTechApp_Final_Project/core/utils/theme/app_decoration.dart';
 import 'package:BTechApp_Final_Project/presentation/checkin/cubit/checkin_cubit/checkin_cubit.dart';
+import 'package:BTechApp_Final_Project/presentation/checkout/cubit/checkout_cubit/checkout_cubit.dart';
 import 'package:BTechApp_Final_Project/repository/checkin_repository.dart';
 import 'package:BTechApp_Final_Project/widgets/custom_card.dart';
 import 'package:flutter/material.dart';
@@ -20,13 +22,14 @@ class _HomeMenuState extends State<HomeMenu> {
   void initState() {
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return Column(
 
       children: <Widget>[
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             BlocBuilder<CheckInCubit, CheckInState>(
               builder: (context, state) {
@@ -37,12 +40,20 @@ class _HomeMenuState extends State<HomeMenu> {
                 );
               },
             ),
-            CustomCardMenu(title: 'CheckOut', counter: 15, route: '/checkout',),
+            BlocBuilder<CheckOutCubit, CheckOutState>(
+              builder: (context, state) {
+                return CustomCardMenu(
+                  title: 'CheckOut',
+                  counter: state.checkoutList.length,
+                  route: '/checkout',);
+              },
+            ),
           ],
         ),
+        SizedBox(height: BgaSizedboxSize.getSizedBoxMaxHeight()),
 
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: const [
             CustomCardMenu(title: 'Asistensi Masuk', counter: 2),
             CustomCardMenu(title: 'Asistensi Keluar', counter: 4),

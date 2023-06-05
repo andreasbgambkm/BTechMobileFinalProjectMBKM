@@ -1,19 +1,20 @@
+import 'package:BTechApp_Final_Project/core/app_expor.dart';
 import 'package:BTechApp_Final_Project/core/utils/color_pallete.dart';
 import 'package:BTechApp_Final_Project/core/utils/theme/app_decoration.dart';
-import 'package:BTechApp_Final_Project/data/login_data.dart';
-import 'package:BTechApp_Final_Project/presentation/checkin/cubit/checkin_scan_cubit/scan_checkin_cubit.dart';
-import 'package:BTechApp_Final_Project/presentation/checkin/screen/checkin_page.dart';
-import 'package:BTechApp_Final_Project/presentation/checkin/screen/checkin_scan_page.dart';
-import 'package:BTechApp_Final_Project/presentation/checkout/cubit/checkout_cubit/checkout_cubit.dart';
-import 'package:BTechApp_Final_Project/presentation/checkout/cubit/checkout_scan_cubit/scan_checkout_cubit.dart';
-import 'package:BTechApp_Final_Project/presentation/checkout/screen/checkout_page.dart';
-import 'package:BTechApp_Final_Project/presentation/checkout/screen/checkout_scan_page.dart';
-import 'package:BTechApp_Final_Project/presentation/home/screen/home_page.dart';
-import 'package:BTechApp_Final_Project/presentation/login/cubit/cubit.dart';
-import 'package:BTechApp_Final_Project/presentation/login/screen/login_page.dart';
+import 'package:BTechApp_Final_Project/data/models/login_model.dart';
+import 'package:BTechApp_Final_Project/presentation/features/dashboard/home/cubit/cubit.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'presentation/checkin/cubit/checkin_cubit/checkin_cubit.dart';
+import 'presentation/features/attendance/checkin/cubit/checkin_cubit/checkin_cubit.dart';
+import 'presentation/features/attendance/checkin/cubit/checkin_scan_cubit/scan_checkin_cubit.dart';
+import 'presentation/features/attendance/checkin/screen/checkin_page.dart';
+import 'presentation/features/attendance/checkin/screen/checkin_scan_page.dart';
+import 'presentation/features/attendance/checkout/cubit/checkout_cubit/checkout_cubit.dart';
+import 'presentation/features/attendance/checkout/cubit/checkout_scan_cubit/scan_checkout_cubit.dart';
+import 'presentation/features/attendance/checkout/screen/checkout_page.dart';
+import 'presentation/features/attendance/checkout/screen/checkout_scan_page.dart';
+import 'presentation/features/auth/login/cubit/cubit.dart';
+import 'presentation/features/auth/login/screen/login_page.dart';
+import 'presentation/features/dashboard/home/screen/home_page.dart';
 
 void main() {
   runApp(MyApp());
@@ -29,6 +30,7 @@ class MyApp extends StatelessWidget {
         BlocProvider<CheckOutCubit>(create: (context)=> CheckOutCubit()),
         BlocProvider<ScanCheckinCubit>(create: (context) => ScanCheckinCubit()),
         BlocProvider<ScanCheckoutCubit>(create: (context) => ScanCheckoutCubit()),
+        BlocProvider<HomeCubit>(create: (context) => HomeCubit()),
       ],
       child: MaterialApp(
         title: 'SPARTA (Sistem Perkebunan Area Bumitama)',

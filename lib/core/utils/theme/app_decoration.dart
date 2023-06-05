@@ -50,14 +50,14 @@ class AppDecoration {
 }
 
 class BorderRadiusStyle {
-  static BorderRadius customBorderTL102 = BorderRadius.only(
+  static BorderRadius customBorderTL102 = const BorderRadius.only(
     topLeft: Radius.circular(2),
     bottomLeft: Radius.circular(10
     ),
     bottomRight: Radius.circular(10),
   );
 
-  static BorderRadius customBorderTL101 = BorderRadius.only(
+  static BorderRadius customBorderTL101 = const BorderRadius.only(
     topLeft: Radius.circular(10,
     ),
     topRight: Radius.circular(
@@ -67,6 +67,26 @@ class BorderRadiusStyle {
     ),
     bottomRight: Radius.circular(
         10,
+    ),
+  );
+
+  static BorderRadius customTopBorder25 = const BorderRadius.only(
+    topLeft: Radius.circular(25,
+    ),
+    topRight: Radius.circular(
+
+    25,
+
+    ),
+  );
+
+  static BorderRadius customTopBorder50 = const BorderRadius.only(
+    topLeft: Radius.circular(50,
+    ),
+    topRight: Radius.circular(
+
+      50,
+
     ),
   );
 
@@ -282,6 +302,10 @@ class BgaPaddingSize {
   }
   static EdgeInsets getPaddingBottom8() {
     return const EdgeInsets.only( bottom: 8);
+  }
+
+  static EdgeInsets getPaddingLeftRight20() {
+    return const EdgeInsets.only( right: 20, left: 20);
   }
 }
 

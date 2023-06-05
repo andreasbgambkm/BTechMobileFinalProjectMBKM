@@ -1,11 +1,8 @@
 import 'package:BTechApp_Final_Project/core/utils/color_pallete.dart';
+import 'package:BTechApp_Final_Project/core/utils/constant.dart';
 import 'package:BTechApp_Final_Project/core/utils/theme/app_decoration.dart';
-import 'package:BTechApp_Final_Project/models/checkout_model.dart';
-import 'package:BTechApp_Final_Project/presentation/checkout/cubit/checkout_cubit/checkout_cubit.dart';
-import 'package:BTechApp_Final_Project/repository/checkout_repository.dart';
+import 'package:BTechApp_Final_Project/widgets/custom_alert.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 
 class CustomCardGps extends StatelessWidget {
   final String title;
@@ -320,7 +317,8 @@ class _CustomCardCheckState extends State<CustomCardCheck> {
                   ),
                 ],
               ),
-              SizedBox(height: BgaSizedboxSize.getSizedBoxMidHeight()),
+              SizedBox(height: BgaSizedboxSize.getSizedBoxMaxHeight()),
+              SizedBox(height: BgaSizedboxSize.getSizedBoxMaxHeight()),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
@@ -337,8 +335,7 @@ class _CustomCardCheckState extends State<CustomCardCheck> {
                       alignment: Alignment.center,
                       child: Container(
                         color: labelBackgroundColor,
-                        padding: BgaPaddingSize
-                            .getBgaPaddingBackgroundColorCheckinTime(),
+                        padding: BgaPaddingSize.getBgaPaddingBackgroundColorCheckinTime(),
                         child: Text(
                           widget.checkinTime,
                           style: BgaTextStyle.subtitleText2,
@@ -349,32 +346,64 @@ class _CustomCardCheckState extends State<CustomCardCheck> {
 
                 ],
               ),
+              Row(
 
-
-
-
-                Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  if (widget.notes != null && widget.notes.isNotEmpty)
-                  Padding(
-                    padding: BgaPaddingSize.getPaddingBottom8(),
-                    child: Text(
-                      "Notes : ${widget.notes}",
-
-                      style: BgaTextStyle.subtitleText,
-                    ),
+                children: <Widget>[
+                  if(widget.label == 'Check Out')
+                  Text(
+                    "Notes :",
+                    style: BgaTextStyle.homeCounterPersonText,
                   ),
 
-                  if (widget.isCheckout)
+
+
+
+                ],
+              ),
+
+              SizedBox(height: BgaSizedboxSize.getSizedBoxMidHeight(),),
+              if (widget.label =='Check Out')
+
+              Container(
+                decoration: BoxDecoration(
+                  border: Border.all(width: 1, color: BgaColor.bgaBlueGray400), // Mengatur border
+                  borderRadius: BorderRadiusStyle.roundedBorder10, // Mengatur border radius
+                ),
+                child: Row(
+                  children: [
+
+                    Expanded(
+                      child: Padding(
+                        padding: BgaPaddingSize.getPaddingBottom8(),
+                        child: TextField(
+                          enabled: false,
+                          onChanged: (value) {
+                            setState(() {
+
+                            });
+                          },
+                          decoration: InputDecoration(
+                            labelText: "${widget.notes}",
+                            labelStyle: BgaTextStyle.searchBarText,
+                            border: InputBorder.none, // Menghilangkan border bawaan TextField
+                            contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 12), // Mengatur padding dalam TextField
+                          ),
+                        ),
+                      ),
+                    ),
+
+                    if (widget.isCheckout)
                     IconButton(
                       icon: Icon(Icons.edit),
                       onPressed: () {
                         _showCommentDialog();
                       },
                     ),
-                ],
+                  ],
+                ),
               ),
+
+
 
               SizedBox(height: BgaSizedboxSize.getSizedBoxMidHeight()),
             ],
@@ -391,41 +420,10 @@ class _CustomCardCheckState extends State<CustomCardCheck> {
      showDialog(
        context: context,
        builder: (BuildContext context) {
-         return AlertDialog(
-           title: Text('Add Comment'),
-           content: TextField(
-             controller: _commentController,
 
-             onChanged: (value){
-               setState(() {
+         return BgaAddNotes(id: widget.id!, img: Image.asset(imageAlertDefault),);
 
-               });
-             },
-             decoration: InputDecoration(
-               labelText: 'Comment',
-             ),
-           ),
-           actions: <Widget>[
-             TextButton(
-               child: Text('Cancel'),
-               onPressed: () {
-                 Navigator.of(context).pop();
-               },
-             ),
-             TextButton(
-               child: Text('Save'),
-               onPressed: () {
-                 final updatedNote = _commentController.text;
-                 final id = widget.id!;
-                 if (updatedNote.isNotEmpty) {
-                   context.read<CheckOutCubit>().updateNote(id, updatedNote);
-                   context.read<CheckOutCubit>().refresh();
-                 }
-                 Navigator.of(context).pop();
-               },
-             ),
-           ],
-         );
+
        },
      );
    }

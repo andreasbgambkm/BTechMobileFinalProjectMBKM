@@ -272,6 +272,10 @@ class BgaPaddingSize {
     return const EdgeInsets.symmetric(vertical: 10.0);
   }
 
+  static EdgeInsets getBgaPaddingNotesCheckOut(){
+    return const EdgeInsets.symmetric(vertical: 40, horizontal: 16);
+  }
+
 
   static EdgeInsets getBgaPaddingBackgroundColorCheckinTime(){
     return const EdgeInsets.symmetric(vertical: 4, horizontal: 8);

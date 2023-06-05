@@ -2,7 +2,6 @@ import 'package:BTechApp_Final_Project/core/utils/color_pallete.dart';
 import 'package:BTechApp_Final_Project/core/utils/constant.dart';
 import 'package:BTechApp_Final_Project/core/utils/theme/app_decoration.dart';
 import 'package:BTechApp_Final_Project/presentation/checkout/cubit/checkout_cubit/checkout_cubit.dart';
-import 'package:BTechApp_Final_Project/repository/checkout_repository.dart';
 import 'package:BTechApp_Final_Project/widgets/custom_appbar.dart';
 import 'package:BTechApp_Final_Project/widgets/custom_button.dart';
 import 'package:BTechApp_Final_Project/widgets/custom_card.dart';
@@ -106,7 +105,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
                 },
                 builder: (context, state) {
                   if (state.isLoading) {
-                    return CircularProgressIndicator();
+                    return Center(child: CircularProgressIndicator(color: BgaColor.bgaOrange,));
                   } else if (state.isEmpty) {
                     return ListView(
                       shrinkWrap: true,

@@ -98,6 +98,8 @@ class BorderRadiusStyle {
 
   static BorderRadius roundedBorder5 = BorderRadius.circular(5
   );
+  static BorderRadius roundedBorder20 = BorderRadius.circular(20
+  );
   static BorderRadius bgaAvatarRadius45 = BorderRadius.circular(45);
   static BorderRadius bgaroundedBorder15 = BorderRadius.circular(15);
 

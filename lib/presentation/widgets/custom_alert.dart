@@ -142,16 +142,16 @@ class _BgaCustomAlertState extends State<BgaCustomAlert> {
 
 
 class BgaPopUp {
-  static void showLoading(String message) {
-    TipDialogHelper.loading(message);
+  static  showLoading() async {
+    TipDialogHelper.loading('Loading....');
   }
 
-  static void dismissLoading() {
+  static dismissLoading() {
     TipDialogHelper.dismiss();
   }
 
-  static void showSuccess(String message) {
-    TipDialogHelper.success(message);
+  static showSuccess() {
+    TipDialogHelper.success('Login Berhasil');
   }
 
   static void showFail(String message) {

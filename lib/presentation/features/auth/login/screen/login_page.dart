@@ -1,11 +1,16 @@
 import 'package:BTechApp_Final_Project/core/utils/color_pallete.dart';
+import 'package:BTechApp_Final_Project/core/utils/constant.dart';
 import 'package:BTechApp_Final_Project/core/utils/theme/app_decoration.dart';
 import 'package:BTechApp_Final_Project/data/repositories/checkin_repository.dart';
+import 'package:BTechApp_Final_Project/data/repositories/division_repository.dart';
 import 'package:BTechApp_Final_Project/data/repositories/employee_repository.dart';
 import 'package:BTechApp_Final_Project/data/repositories/attendance_repository.dart';
 import 'package:BTechApp_Final_Project/data/repositories/checkout_repository.dart';
+import 'package:BTechApp_Final_Project/data/repositories/estate_repository.dart';
+import 'package:BTechApp_Final_Project/data/repositories/kemandoran_repository.dart';
 import 'package:BTechApp_Final_Project/presentation/features/auth/login/cubit/cubit.dart';
 import 'package:BTechApp_Final_Project/presentation/features/auth/login/cubit/state.dart';
+import 'package:BTechApp_Final_Project/presentation/widgets/custom_alert.dart';
 import 'package:BTechApp_Final_Project/presentation/widgets/custom_button.dart';
 import 'package:BTechApp_Final_Project/presentation/widgets/custom_icon.dart';
 import 'package:flutter/material.dart';
@@ -61,6 +66,8 @@ class _LoginViewState extends State<LoginView> {
                             const SnackBar(content: Text('Login Success')),
                           );
                         // Navigate to home page
+
+
                         Navigator.pushReplacementNamed(context, '/home', arguments: state.loginData.user);
                       } else if (state is LoginFailure) {
                         ScaffoldMessenger.of(context)
@@ -68,7 +75,10 @@ class _LoginViewState extends State<LoginView> {
                           ..showSnackBar(
                             SnackBar(content: Text(state.error)),
                           );
+
                         // Show error message
+
+
 
                         print(state.error);
                       }
@@ -83,7 +93,10 @@ class _LoginViewState extends State<LoginView> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             if (state is LoginLoading) ...[
-                              const CircularProgressIndicator(),
+                              // Center(child: CircularProgressIndicator(color: BgaColor.bgaOrange,)),
+                              BgaPopUp.showLoading(),
+                              BgaPopUp.dismissLoading(),
+
                               SizedBox( height: MediaQuery.of(context).size.height * 0.03),
                             ],
                             TextFormField(
@@ -98,7 +111,7 @@ class _LoginViewState extends State<LoginView> {
                               decoration: InputDecoration(
                                   border: OutlineInputBorder(
                                     borderSide: BorderSide(width: 3, color: Colors.orange),
-                                    borderRadius: BorderRadius.circular(20.0),
+                                    borderRadius: BorderRadiusStyle.roundedBorder20,
                                   ),
                                   prefixIcon: CustomIconRectangle(icon: Icons.person_2_outlined),
                                   labelText: 'Username',
@@ -137,15 +150,17 @@ class _LoginViewState extends State<LoginView> {
                               backgroundColor: BgaColor.bgaOrange,
                               onPressed: () async {
                                 final EmployeeRepository _employeeRepository =EmployeeRepository();
-                                final CheckInRepository _checkInRepository = CheckInRepository();
-                                final CheckOutRepository _checkOutRepository = CheckOutRepository();
-                                final AttendanceRepository _attendanceRepository = AttendanceRepository();
+                                final KemandoranRepository _kemandoranRepository = KemandoranRepository();
+                                final DivisionRepository _divisionRepository = DivisionRepository();
+                                final EstateRepository _estateRepository = EstateRepository();
+                                await Center(child: CircularProgressIndicator(color: BgaColor.bgaOrange,));
+
                                 await _employeeRepository.open();
                                 await _employeeRepository.injectFromJson();
-                                await _checkInRepository.openCheckIn();
-                                await _checkOutRepository.openCheckOut();
+                                await _estateRepository.injectFromJson();
+                                await _divisionRepository.injectFromJson();
+                                await _kemandoranRepository.injectFromJson();
 
-                                await _attendanceRepository.openAttendance();
                                 final username = _usernameController.text;
                                 final password = _passwordController.text;
                                 context.read<LoginCubit>().performLogin(username, password);

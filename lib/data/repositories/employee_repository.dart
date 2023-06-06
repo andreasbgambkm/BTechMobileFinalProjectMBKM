@@ -10,6 +10,10 @@ class EmployeeRepository {
   static const String checkInTableName = 'CheckIn';
   static const String checkOutTableName = 'CheckOut';
   static const String attendanceTableName = 'Attendance';
+  static const String estateTableName = 'Estate';
+  static const String divisionTableName = 'Division';
+  static const String kemandoranTableName = 'Kemandoran';
+  static const String assistanceOutTableName = 'AssistanceOut';
 
   Future<Database> open() async {
     final dbPath = await getDatabasesPath();
@@ -18,7 +22,6 @@ class EmployeeRepository {
     return openDatabase(
       databasePath,
       onCreate: (db, version) async {
-
         await db.execute('''
         CREATE TABLE IF NOT EXISTS $employeeTableName(
           
@@ -31,7 +34,6 @@ class EmployeeRepository {
           
         )
       ''');
-
 
         db.execute('''
         CREATE TABLE IF NOT EXISTS $checkInTableName(
@@ -77,14 +79,56 @@ class EmployeeRepository {
             )
       ''');
 
+        db.execute('''
+          CREATE TABLE IF NOT EXISTS $estateTableName(
+            id_estate TEXT PRIMARY KEY,
+            estate TEXT
+          )
+        ''');
 
+        db.execute('''
+          CREATE TABLE IF NOT EXISTS $divisionTableName(
+            id_division TEXT PRIMARY KEY,
+            division TEXT,
+            id_estate TEXT,
+            FOREIGN KEY (id_estate) REFERENCES $estateTableName(id_estate)
+          )
+        ''');
+        db.execute('''
+          CREATE TABLE IF NOT EXISTS $kemandoranTableName(
+            id_kemandoran TEXT PRIMARY KEY,
+            id_division TEXT,
+            id_estate TEXT,
+            kemandoran TEXT,
+            groupName TEXT,
+            FOREIGN KEY (id_division) REFERENCES $divisionTableName(id_division),
+            FOREIGN KEY (id_estate) REFERENCES $estateTableName(id_estate)
+          )
+        ''');
 
-
+        db.execute('''
+        CREATE TABLE IF NOT EXISTS $assistanceOutTableName(
+    id_assistance INTEGER PRIMARY KEY AUTOINCREMENT,
+    assistance_type TEXT,
+    employee_nik TEXT,
+    employee_name TEXT,
+    employee_age INTEGER,
+    employee_position TEXT,
+    division TEXT,
+    kemandoran TEXT,
+    estate TEXT,
+    assistanceOutTime TEXT,
+    FOREIGN KEY (employee_nik) REFERENCES $employeeTableName(nik),
+    FOREIGN KEY (division) REFERENCES $divisionTableName(id_division),
+    FOREIGN KEY (kemandoran) REFERENCES $kemandoranTableName(id_kemandoran),
+    FOREIGN KEY (estate) REFERENCES $estateTableName(id_estate)
+  )
+''');
       },
-      version: 10,
+      version: 12,
       onUpgrade: (db, oldVersion, newVersion) async {
         if (oldVersion < newVersion) {
-          if (oldVersion < 11) {
+          if (oldVersion < 13) {
             await _upgradeDatabase(db, oldVersion, newVersion);
           }
         }
@@ -94,13 +138,16 @@ class EmployeeRepository {
 
   Future<void> _upgradeDatabase(Database db, int oldVersion, int newVersion) async {
     if (oldVersion < newVersion) {
-      if (oldVersion < 11) {
+      if (oldVersion < 13) {
         await db.transaction((txn) async {
           await txn.execute('BEGIN TRANSACTION;');
-          await txn.execute('CREATE TABLE Employees_temp AS SELECT * FROM Employees;');
+          await txn.execute(
+              'CREATE TABLE Employees_temp AS SELECT * FROM Employees;');
           await txn.execute('DROP TABLE Employees;');
-          await txn.execute('CREATE TABLE Employees (nik TEXT PRIMARY KEY, name TEXT, age INTEGER, position TEXT, division TEXT, kemandoran TEXT);');
-          await txn.execute('INSERT INTO Employees (nik, name, age, position, division, kemandoran, isCheckedIn, isCheckedOut, checkin_time) SELECT nik, name, age, position, division, kemandoran, isCheckedIn, isCheckedOut, checkin_time FROM Employees_temp;');
+          await txn.execute(
+              'CREATE TABLE Employees (nik TEXT PRIMARY KEY, name TEXT, age INTEGER, position TEXT, division TEXT, kemandoran TEXT);');
+          await txn.execute(
+              'INSERT INTO Employees (nik, name, age, position, division, kemandoran, isCheckedIn, isCheckedOut, checkin_time) SELECT nik, name, age, position, division, kemandoran, isCheckedIn, isCheckedOut, checkin_time FROM Employees_temp;');
           await txn.execute('DROP TABLE Employees_temp;');
           await txn.execute('COMMIT;');
         });
@@ -108,7 +155,8 @@ class EmployeeRepository {
     }
   }
 
-  Future<Map<String, dynamic>?> findEmployeeByNik(String nik, String name) async {
+  Future<Map<String, dynamic>?> findEmployeeByNik(
+      String nik, String name) async {
     final Database db = await open();
     final List<Map<String, dynamic>> maps = await db.query(
       EmployeeRepository.employeeTableName,
@@ -122,15 +170,18 @@ class EmployeeRepository {
   }
 
   Future<void> injectFromJson() async {
-    final String jsonString = await rootBundle.loadString('assets/data/employee_data.json');
+    final String jsonString =
+        await rootBundle.loadString('assets/data/employee_data.json');
     final List<dynamic> jsonList = json.decode(jsonString);
-    final List<Employee> employees = jsonList.map((e) => Employee.fromJson(e)).toList();
+    final List<Employee> employees =
+        jsonList.map((e) => Employee.fromJson(e)).toList();
 
     final Database db = await open();
 
     try {
       for (final employee in employees) {
-        final existingEmployee = await findEmployeeByNik(employee.nik, employee.name);
+        final existingEmployee =
+            await findEmployeeByNik(employee.nik, employee.name);
         if (existingEmployee == null) {
           await insertEmployee(employee);
         } else {
@@ -144,7 +195,6 @@ class EmployeeRepository {
     }
   }
 
-
   Future<CheckInModel> insertCheckIn(String nik, String name, int isCheckedIn, String checkInTime) async {
     final db = await open();
     final checkIn = CheckInModel(
@@ -157,11 +207,11 @@ class EmployeeRepository {
     return checkIn;
   }
 
-
   Future<void> insertEmployee(Employee employee) async {
     final db = await open();
 
-    final existingEmployee = await findEmployeeByNik(employee.nik, employee.name);
+    final existingEmployee =
+        await findEmployeeByNik(employee.nik, employee.name);
     if (existingEmployee == null) {
       await db.insert(employeeTableName, employee.toMap());
     } else {
@@ -172,11 +222,7 @@ class EmployeeRepository {
     }
   }
 
-
-
-
-
-   Future<List<Employee>> getAll() async {
+  Future<List<Employee>> getAll() async {
     final db = await open();
     final maps = await db.query(employeeTableName);
     return List.generate(maps.length, (i) {
@@ -190,28 +236,25 @@ class EmployeeRepository {
     return List.generate(maps.length, (i) {
       final employee = Employee.fromMap(maps[i]);
       return Employee(
-
-          nik: employee.nik,
-          name: employee.name,
-          position: employee.position,
-
-
+        nik: employee.nik,
+        name: employee.name,
+        position: employee.position,
       );
     });
   }
 
-
-
-   Future<void> update(Employee employee) async {
+  Future<void> update(Employee employee) async {
     final db = await open();
-    await db.update(employeeTableName, employee.toMap(), where: 'nik = ?', whereArgs: [employee.nik]);
+    await db.update(employeeTableName, employee.toMap(),
+        where: 'nik = ?', whereArgs: [employee.nik]);
   }
+
   Future<void> deleteAll() async {
     final db = await open();
     await db.delete(employeeTableName, where: '1');
   }
 
-   Future<void> deleteById(String nik) async {
+  Future<void> deleteById(String nik) async {
     final db = await open();
     await db.delete(employeeTableName, where: 'nik = ?', whereArgs: [nik]);
   }

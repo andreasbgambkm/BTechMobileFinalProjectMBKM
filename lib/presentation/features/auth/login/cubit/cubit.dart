@@ -1,6 +1,8 @@
 import 'package:BTechApp_Final_Project/core/utils/color_pallete.dart';
+import 'package:BTechApp_Final_Project/core/utils/constant.dart';
 import 'package:BTechApp_Final_Project/data/repositories/login_repository.dart';
 import 'package:BTechApp_Final_Project/presentation/features/auth/login/cubit/state.dart';
+import 'package:BTechApp_Final_Project/presentation/widgets/custom_alert.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 
@@ -28,6 +30,7 @@ class LoginCubit extends Cubit<LoginState> {
 
       if (loginData.username == username && loginData.password == password) {
 
+        Center(child: CircularProgressIndicator(color: BgaColor.bgaOrange,));
 
         emit(LoginSuccess(loginData: loginData));
 
@@ -44,6 +47,23 @@ class LoginCubit extends Cubit<LoginState> {
       showDialog(
         context: context,
         builder: (BuildContext context) {
+
+          return BgaCustomAlert(
+            title: 'Konfirmasi Logout',
+            img: Image.asset(imageAlertDefault),
+            descriptions: 'Anda Yakin Ingin Logout?',
+          text: 'Logout',
+          onPressed: (){
+            emit(LoginLoading());
+            // Melakukan logout dan kembali ke halaman login
+            emit(Logout());
+            Navigator.pushNamedAndRemoveUntil(
+              context,
+              '/login',
+                  (route) => false,
+            );
+
+          },);
           return AlertDialog(
             title: Text('Konfirmasi Logout'),
             content: Text('Anda yakin ingin logout?'),

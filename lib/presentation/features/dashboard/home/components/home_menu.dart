@@ -56,7 +56,7 @@ class _HomeMenuState extends State<HomeMenu> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: const [
             CustomCardMenu(title: 'Asistensi Masuk', counter: 2),
-            CustomCardMenu(title: 'Asistensi Keluar', counter: 4),
+            CustomCardMenu(title: 'Asistensi Keluar', counter: 4, route: '/assistance_out',),
           ],
         )
 

@@ -168,9 +168,7 @@ class _CheckInPageState extends State<CheckInPage> {
 
                       );
                     } else {
-                      return Container(
-                        child: Center(child: CircularProgressIndicator(color: Colors.deepOrange)),
-                      );
+                      return Center(child: CircularProgressIndicator(color: BgaColor.bgaOrange));
                     }
                   },
                 ),

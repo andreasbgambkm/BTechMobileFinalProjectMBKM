@@ -1,0 +1,45 @@
+[
+  {
+    "id_kemandoran": "0006",
+    "id_division": "02",
+    "id_estate": "BAGE",
+    "kemandoran": "BHS BAGE D2 GROUP 1",
+    "groupName"     : "GROUP 1"
+  },
+  {
+    "id_kemandoran": "0007",
+    "id_division": "02",
+    "id_estate": "BAGE",
+    "kemandoran": "BHS BAGE D2 GROUP 2",
+    "groupName"     : "GROUP 2"
+  },
+  {
+    "id_kemandoran": "0008",
+    "id_division": "02",
+    "id_estate": "BAGE",
+    "kemandoran": "BHS BAGE D2 GROUP 3",
+    "groupName"     : "GROUP 3"
+  },
+
+  {
+    "id_kemandoran": "0009",
+    "id_division": "02",
+    "id_estate": "BAGE",
+    "kemandoran": "BHS BAGE D2 GROUP 4",
+    "groupName"     : "GROUP 4"
+  },
+  {
+    "id_kemandoran": "0010",
+    "id_division": "02",
+    "id_estate": "BAGE",
+    "kemandoran": "BHS BAGE D2 GROUP 5",
+    "groupName"     : "GROUP 5"
+  },
+  {
+    "id_kemandoran": "1366",
+    "id_division" : "02",
+    "id_estate"   : "BAGE",
+    "kemandoran"  : "BSS BAGE D2 GROUP 1",
+    "groupName"       : "GROUP 1"
+  }
+]

@@ -2,6 +2,7 @@ import 'package:BTechApp_Final_Project/core/app_expor.dart';
 import 'package:BTechApp_Final_Project/core/utils/color_pallete.dart';
 import 'package:BTechApp_Final_Project/core/utils/theme/app_decoration.dart';
 import 'package:BTechApp_Final_Project/data/models/login_model.dart';
+import 'package:BTechApp_Final_Project/presentation/features/assistance/assistance_out/screen/assistance_out.dart';
 import 'package:BTechApp_Final_Project/presentation/features/dashboard/home/cubit/cubit.dart';
 import 'package:flutter/material.dart';
 import 'presentation/features/attendance/checkin/cubit/checkin_cubit/checkin_cubit.dart';
@@ -50,6 +51,7 @@ class MyApp extends StatelessWidget {
           '/checkin_scanner': (context) => const QRScanner(),
           '/checkout': (context) => const CheckOutPage(),
           '/checkout_scanner': (context) => const QRScannerCheckOut(),
+          '/assistance_out': (context) => const AssistanceOut(),
         },
       ),
     );

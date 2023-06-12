@@ -3,8 +3,10 @@ import 'dart:io';
 import 'package:BTechApp_Final_Project/core/utils/color_pallete.dart';
 import 'package:BTechApp_Final_Project/core/utils/constant.dart';
 import 'package:BTechApp_Final_Project/core/utils/theme/app_decoration.dart';
+import 'package:BTechApp_Final_Project/data/models/attendance_model.dart';
 import 'package:BTechApp_Final_Project/data/repositories/checkin_repository.dart';
 import 'package:BTechApp_Final_Project/data/repositories/employee_repository.dart';
+import 'package:BTechApp_Final_Project/presentation/features/attendance/attendance/attendance_cubit.dart';
 import 'package:BTechApp_Final_Project/presentation/features/attendance/checkin/cubit/checkin_cubit/checkin_cubit.dart';
 import 'package:BTechApp_Final_Project/presentation/features/attendance/checkin/cubit/checkin_scan_cubit/scan_checkin_cubit.dart';
 import 'package:BTechApp_Final_Project/presentation/widgets/custom_alert.dart';
@@ -14,6 +16,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:sqflite/sqflite.dart';
 import 'package:vibration/vibration.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 
@@ -319,15 +322,40 @@ class _QRScannerState extends State<QRScanner> {
                               onPressed: () async {
                                 final now = DateTime.now();
                                 final formattedTime = DateFormat('HH:mm').format(now);
+                                final createdAt = DateFormat('yyyy-MM-dd').format(now);
+
+                                final database = await EmployeeRepository().open();
+
                                 context.read<CheckInCubit>().getAllSuccessfulCheckedIn();
-                                // Menghitung nilai isLated berdasarkan waktu check-in
                                 int isLated = (now.hour >= 8) ? 1 : 0;
-                                await context.read<CheckInCubit>().insertCheckIn(nik, name, isCheckedIn, formattedTime, isLated);
+
+                                await context.read<CheckInCubit>().insertCheckIn(nik, name, isCheckedIn, formattedTime, isLated, createdAt);
+
+                                final checkInIdResult = await database.rawQuery('SELECT last_insert_rowid()');
+                                final checkInId = checkInIdResult.first.values.first as int;
+
+                                final attendance = Attendance(
+                                  nik: nik,
+                                  name: name,
+                                  idCheckIn: checkInId,
+                                  idCheckOut: 0,
+                                  isCheckedIn: isCheckedIn,
+                                  checkInTime: formattedTime,
+                                  isCheckedOut: 0,
+                                  checkoutTime: '',
+                                  note: '',
+                                  createdAt: createdAt,
+                                );
+
+                                await context.read<AttendanceCubit>().insertAttendanceData(attendance);
+
                                 context.read<CheckInCubit>().refresh();
                                 Navigator.pop(context);
                                 _startCamera();
                               },
                             ),
+
+
                             SizedBox(height: BgaSizedboxSize.getSizedBoxMaxHeight()),
                           ],
                         ),

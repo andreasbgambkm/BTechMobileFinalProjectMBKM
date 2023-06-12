@@ -139,6 +139,7 @@ class BgaTextStyle {
     color: BgaColor.bgaBlackTitleBold,
   );
 
+
   static TextStyle loginInputText = TextStyle(
     fontSize: 14.0,
     fontWeight: FontWeight.normal,
@@ -165,6 +166,13 @@ class BgaTextStyle {
     fontWeight: FontWeight.bold,
     fontFamily: 'Poppins',
     color: BgaColor.bgaBlackTitleBold,
+  );
+
+  static TextStyle titleBoldOrangeText = TextStyle(
+    fontSize: 14.0,
+    fontWeight: FontWeight.bold,
+    fontFamily: 'Poppins',
+    color: BgaColor.bgaOrange,
   );
 
   static TextStyle titleNormalText = TextStyle(

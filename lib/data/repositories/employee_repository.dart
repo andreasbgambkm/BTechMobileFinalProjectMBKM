@@ -43,6 +43,7 @@ class EmployeeRepository {
           isCheckedIn INTEGER,
           checkInTime TEXT,
           isLated INTEGER,
+          createdAt TEXT,
           FOREIGN KEY (nik) REFERENCES Employees(nik)
         )
       ''');
@@ -56,6 +57,7 @@ class EmployeeRepository {
             checkoutTime TEXT,
             isLated INTEGER,
             note TEXT,
+            createdAt TEXT,
             FOREIGN KEY (nik) REFERENCES Employees(nik)
             )
       ''');
@@ -68,11 +70,11 @@ class EmployeeRepository {
             idCheckIn INTEGER,
             idCheckOut INTEGER,
             isCheckedIn INTEGER,
-            checkinTime TEXT,
+            checkInTime TEXT,
             isCheckedOut INTEGER,
-            checkoutTime TEXT
+            checkoutTime TEXT,
             note TEXT,
-            cretedAt TEXT,
+            createdAt TEXT,
             FOREIGN KEY (nik) REFERENCES Employees(nik),
             FOREIGN KEY (idCheckIn) REFERENCES CheckIn(id),
             FOREIGN KEY (idCheckOut) REFERENCES CheckOut(id)
@@ -117,6 +119,7 @@ class EmployeeRepository {
     division TEXT,
     kemandoran TEXT,
     estate TEXT,
+    isAssistedOut,
     assistanceOutTime TEXT,
     FOREIGN KEY (employee_nik) REFERENCES $employeeTableName(nik),
     FOREIGN KEY (division) REFERENCES $divisionTableName(id_division),
@@ -146,8 +149,7 @@ class EmployeeRepository {
           await txn.execute('DROP TABLE Employees;');
           await txn.execute(
               'CREATE TABLE Employees (nik TEXT PRIMARY KEY, name TEXT, age INTEGER, position TEXT, division TEXT, kemandoran TEXT);');
-          await txn.execute(
-              'INSERT INTO Employees (nik, name, age, position, division, kemandoran, isCheckedIn, isCheckedOut, checkin_time) SELECT nik, name, age, position, division, kemandoran, isCheckedIn, isCheckedOut, checkin_time FROM Employees_temp;');
+          await txn.execute( 'INSERT INTO Employees (nik, name, age, position, division, kemandoran) SELECT nik, name, age, position, division, kemandoran FROM Employees_temp;');
           await txn.execute('DROP TABLE Employees_temp;');
           await txn.execute('COMMIT;');
         });

@@ -48,9 +48,10 @@ class ScanCheckinCubit extends Cubit<ScanCheckinState> {
     try {
       final now = DateTime.now();
       final formattedTime = DateFormat('HH:mm').format(now);
+      final createdAt = DateFormat('yyyy-MM-dd').format(now);
       // Menghitung nilai isLated berdasarkan waktu check-in
       int isLated = (now.hour >= 8) ? 1 : 0;
-      await employeeCheckin.insertCheckIn(nik, name, 1, formattedTime, isLated);
+      await employeeCheckin.insertCheckIn(nik, name, 1, formattedTime, isLated, createdAt );
       emit(ScanCheckinSuccess(barcodeType, data, employee));
 
 

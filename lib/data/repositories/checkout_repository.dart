@@ -107,7 +107,7 @@ class CheckOutRepository {
     return null;
   }
   // Insert CheckOut baru
-  Future<CheckOutModel> insertCheckOut(String nik, String name, int isCheckedOut, String checkoutTime, String note) async {
+  Future<CheckOutModel> insertCheckOut(String nik, String name, int isCheckedOut, String checkoutTime, String note, String createdAt) async {
     final db = await openCheckOut();
     final CheckOut = CheckOutModel(
       nik: nik,
@@ -115,6 +115,7 @@ class CheckOutRepository {
       isCheckedOut: isCheckedOut,
       checkoutTime: checkoutTime,
       note: note,
+      createdAt: createdAt
     );
     CheckOut.id = await db.insert(tableName, CheckOut.toMap());
     return CheckOut;

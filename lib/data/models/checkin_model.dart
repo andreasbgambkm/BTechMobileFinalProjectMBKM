@@ -5,6 +5,7 @@ class CheckInModel {
   int isCheckedIn;
   String checkInTime;
   int isLated;
+  String? createdAt;
 
   CheckInModel({
     this.id,
@@ -13,6 +14,7 @@ class CheckInModel {
     this.isCheckedIn = 0,
     required this.checkInTime,
     this.isLated = 0,
+    this.createdAt,
   });
 
   // konversi dari objek CheckIn menjadi Map
@@ -24,6 +26,7 @@ class CheckInModel {
       'isCheckedIn': isCheckedIn,
       'checkInTime': checkInTime,
       'isLated'    : isLated,
+      'createdAt' : createdAt,
     };
   }
 
@@ -36,6 +39,7 @@ class CheckInModel {
       isCheckedIn: map['isCheckedIn'],
       checkInTime: map['checkInTime'],
       isLated:  map['isLated'],
+      createdAt: map['createdAt']
     );
   }
 

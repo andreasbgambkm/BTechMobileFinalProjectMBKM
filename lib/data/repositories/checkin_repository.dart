@@ -105,7 +105,7 @@ class CheckInRepository {
     return null;
   }
   // Insert CheckIn baru
-  Future<CheckInModel> insertCheckIn(String nik, String name, int isCheckedIn, String checkInTime, int isLated) async {
+  Future<CheckInModel> insertCheckIn(String nik, String name, int isCheckedIn, String checkInTime, int isLated, String createdAt) async {
     final db = await openCheckIn();
     final checkIn = CheckInModel(
       nik: nik,
@@ -113,6 +113,7 @@ class CheckInRepository {
       isCheckedIn: isCheckedIn,
       checkInTime: checkInTime,
       isLated : isLated,
+      createdAt: createdAt
     );
     checkIn.id = await db.insert(tableName, checkIn.toMap());
     return checkIn;

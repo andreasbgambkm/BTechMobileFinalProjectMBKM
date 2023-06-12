@@ -91,5 +91,20 @@ class AttendanceRepository {
     await db.delete(tableName, where: '1');
   }
 
+  Future<void> updateAttendance(String nik, String name, int idCheckOut, int isCheckedOut, String checkOutTime, String createdAt) async {
+    final db = await _getDb();
+    await db.update(
+      tableName,
+      {'nik': nik,
+      'name': name,
+      'idCheckOut': idCheckOut,
+        'isCheckedOut':isCheckedOut,
+      'checkOutTime': checkOutTime,
+      'createdAt' : createdAt},
+      where: 'nik = ? AND name = ?',
+      whereArgs: [nik, name],
+    );
+  }
+
 }
 

@@ -45,12 +45,31 @@ class _CheckOutPageState extends State<CheckOutPage> {
     super.initState();
     checkOutCubit = context.read<CheckOutCubit>();
     checkOutCubit.getAllSuccessfulCheckedOut();
-    printCheckOuts();
+    deleteCheckoutIfDifferentDate();
+     printCheckOuts();
   }
 
   @override
   void dispose() {
     super.dispose();
+  }
+
+  void deleteCheckoutIfDifferentDate() {
+    final now = DateTime.now();
+    final checkoutList = checkOutCubit.state.checkoutList;
+
+    for (int i = 0; i < checkoutList.length; i++) {
+      final createdAt = checkoutList[i].createdAt;
+      print(createdAt);
+
+      if (createdAt != null) {
+        final createdAtDate = DateTime.parse(createdAt);
+
+        if (createdAtDate.day != now.day) {
+          checkOutCubit.deleteAllcheckouts();
+        }
+      }
+    }
   }
 
   @override
@@ -143,7 +162,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
                           nik: CheckOut.nik,
                           notes: CheckOut.note,
                           isCheckout: true,
-                          checkinTime: CheckOut.checkoutTime,
+                          checkTime: CheckOut.checkoutTime,
                         );
                       },
                     );

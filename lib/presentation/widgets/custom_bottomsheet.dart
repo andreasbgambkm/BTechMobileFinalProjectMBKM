@@ -4,63 +4,64 @@ import 'package:flutter/material.dart';
 
 class BgaCustomBottomSheet extends StatelessWidget {
   final List<Widget> children;
-  final Widget? textField;
+  final Widget? searchbarField;
   final Widget? button;
-  final Widget? searchBar;
 
   const BgaCustomBottomSheet({
     Key? key,
     required this.children,
-    this.textField,
+    this.searchbarField,
     this.button,
-    this.searchBar
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: MediaQuery.of(context).size.height / 2,
-      child: Column(
-        children: [
-          if (textField != null) textField!,
-          Expanded(
-            child: ListView.builder(
-              itemCount: children.length,
-              itemBuilder: (BuildContext context, int index) {
-                return Container(
-                  height: MediaQuery.of(context).size.height / 2,
-                  child: Column(
-                    children: [
-                      if (textField != null && searchBar != null) textField!,
-                      Expanded(
-                        child: ListView.separated(
-                          itemCount: children.length,
-                          separatorBuilder: (BuildContext context, int index) => Divider(
-                            color: BgaColor.bgaSearchBarColor, // Warna garis pembatas
-                            thickness:1, // Lebar garis pembatas
+    return ClipRRect(
+      borderRadius: BorderRadius.only(
+        topLeft: Radius.circular(30.0),
+        topRight: Radius.circular(30.0),
+      ),
+      child: Container(
+        height: MediaQuery.of(context).size.height / 2,
+        child: Column(
+          children: <Widget> [
+            Expanded(
+              child: ListView.builder(
+                itemCount: children.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return Container(
+                    height: MediaQuery.of(context).size.height / 2,
+                    child: Column(
+                      children: [
+                        if (searchbarField != null) searchbarField!,
+                        Expanded(
+                          child: ListView.separated(
+                            itemCount: children.length,
+                            separatorBuilder: (BuildContext context, int index) => Divider(
+                              color: BgaColor.bgaSearchBarColor,
+                              thickness: 1,
+                            ),
+                            itemBuilder: (BuildContext context, int index) {
+                              return Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadiusStyle.customBorderBL10,
+                                ),
+                                child: children[index],
+                              );
+                            },
                           ),
-                          itemBuilder: (BuildContext context, int index) {
-                            return Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadiusStyle.customBorderBL10, // Radius circular
-                              ),
-                              child: children[index],
-                            );
-                          },
                         ),
-                      ),
-                      if (button != null) button!,
-                    ],
-                  ),
-                );
-
-              },
+                        if (button != null) button!,
+                      ],
+                    ),
+                  );
+                },
+              ),
             ),
-          ),
-          if (button != null) button!,
-        ],
+            if (button != null) button!,
+          ],
+        ),
       ),
     );
-
   }
 }

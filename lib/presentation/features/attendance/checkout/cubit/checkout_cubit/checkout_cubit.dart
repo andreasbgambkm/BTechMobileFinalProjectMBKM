@@ -41,9 +41,9 @@ class CheckOutCubit extends Cubit<CheckOutState> {
   }
 
 
-  insertCheckOut(String nik, String name, int isCheckedIn, String checkInTime, String notes) async {
+  insertCheckOut(String nik, String name, int isCheckedOut, String checkOutTime, String notes, String createdAt) async {
     try {
-      final checkOut = await checkoutRepository.insertCheckOut(nik, name, isCheckedIn, checkInTime, notes);
+      final checkOut = await checkoutRepository.insertCheckOut(nik, name, isCheckedOut, checkOutTime, notes, createdAt);
       addCheckout(checkOut);
     } catch (error) {
       emit(CheckOutFailure(error.toString()));

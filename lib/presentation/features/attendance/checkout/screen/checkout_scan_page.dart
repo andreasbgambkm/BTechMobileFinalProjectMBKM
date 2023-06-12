@@ -4,9 +4,11 @@ import 'dart:io';
 import 'package:BTechApp_Final_Project/core/utils/color_pallete.dart';
 import 'package:BTechApp_Final_Project/core/utils/constant.dart';
 import 'package:BTechApp_Final_Project/core/utils/theme/app_decoration.dart';
+import 'package:BTechApp_Final_Project/data/models/attendance_model.dart';
 import 'package:BTechApp_Final_Project/data/repositories/checkin_repository.dart';
 import 'package:BTechApp_Final_Project/data/repositories/checkout_repository.dart';
 import 'package:BTechApp_Final_Project/data/repositories/employee_repository.dart';
+import 'package:BTechApp_Final_Project/presentation/features/attendance/attendance/attendance_cubit.dart';
 import 'package:BTechApp_Final_Project/presentation/features/attendance/checkout/cubit/checkout_cubit/checkout_cubit.dart';
 import 'package:BTechApp_Final_Project/presentation/features/attendance/checkout/cubit/checkout_scan_cubit/scan_checkout_cubit.dart';
 import 'package:BTechApp_Final_Project/presentation/widgets/custom_alert.dart';
@@ -141,7 +143,7 @@ class _QRScannerCheckOutState extends State<QRScannerCheckOut> {
     }
   }
 
-  Future<void> _showBottomSheet(BuildContext context, String barcodeType, String data) async {
+  Future <void> _showBottomSheet(BuildContext context, String barcodeType, String data) async {
     List<String> qrData = data.split('|');
     if (qrData.length < 2 || qrData[0].isEmpty || qrData[1].isEmpty) {
       showDialog(
@@ -164,6 +166,7 @@ class _QRScannerCheckOutState extends State<QRScannerCheckOut> {
 
     String nik = qrData[0];
     String name = qrData[1];
+    int isCheckedOut = 1;
     int isCheckedIn = 1;
 
     final employee = await EmployeeRepository().findEmployeeByNik(nik, name);
@@ -208,6 +211,8 @@ class _QRScannerCheckOutState extends State<QRScannerCheckOut> {
           );
         },
       );
+
+
       return;
     }
 
@@ -230,8 +235,10 @@ class _QRScannerCheckOutState extends State<QRScannerCheckOut> {
       return;
     }
 
+
     showModalBottomSheet(
       context: context,
+
       shape:  RoundedRectangleBorder(
           borderRadius: BorderRadiusStyle.customTopBorder25),
       builder: (BuildContext context) {
@@ -329,18 +336,46 @@ class _QRScannerCheckOutState extends State<QRScannerCheckOut> {
                               ),
                             ),
                             SizedBox(height: BgaSizedboxSize.getSizedBoxMaxHeight()),
-                            BgaButton(
-                                text: 'Lanjutkan',
-                                onPressed: () async {
-                                  final now = DateTime.now();
-                                  final formattedTime = DateFormat('HH:mm').format(now);
-                                  context.read<CheckOutCubit>().getAllSuccessfulCheckedOut();
-                                 await  context.read<CheckOutCubit>().insertCheckOut(nik, name, isCheckedIn, formattedTime,'');
-                                 context.read<CheckOutCubit>().refresh();
-                                  Navigator.pop(context);
-                                  _startCamera();}
 
+                            BgaButton(
+                              text: 'Lanjutkan',
+                              onPressed: () async {
+                                final now = DateTime.now();
+                                final formattedTime = DateFormat('HH:mm').format(now);
+                                final createdAt = DateFormat('yyyy-MM-dd').format(now);
+
+                                final database = await EmployeeRepository().open();
+                                // final attendanceCubit = BlocProvider.of<AttendanceCubit>(context, listen: false);
+
+                                context.read<CheckOutCubit>().getAllSuccessfulCheckedOut();
+                                await context.read<CheckOutCubit>().insertCheckOut(nik, name, isCheckedOut, formattedTime, '', createdAt);
+                                context.read<CheckOutCubit>().refresh();
+
+                                final checkOutIdResult = await database.rawQuery('SELECT last_insert_rowid()');
+                                final checkOutId = checkOutIdResult.first.values.first as int;
+
+                                await context.read<AttendanceCubit>().updateAttendances(nik, name, checkOutId, isCheckedOut, formattedTime, createdAt);
+
+
+                                Navigator.pop(context);
+                                _startCamera();
+                              },
                             ),
+
+                            // BgaButton(
+                            //     text: 'Lanjutkan',
+                            //     onPressed: () async {
+                            //       final now = DateTime.now();
+                            //       final formattedTime = DateFormat('HH:mm').format(now);
+                            //       context.read<CheckOutCubit>().getAllSuccessfulCheckedOut();
+                            //      await  context.read<CheckOutCubit>().insertCheckOut(nik, name, isCheckedIn, formattedTime,'');
+                            //      context.read<CheckOutCubit>().refresh();
+                            //       Navigator.pop(context);
+                            //       _startCamera();}
+                            //
+                            // ),
+
+
                             SizedBox(height: BgaSizedboxSize.getSizedBoxMaxHeight()),
                           ],
                         ),

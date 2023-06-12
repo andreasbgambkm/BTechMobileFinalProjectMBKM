@@ -245,32 +245,40 @@ class CustomCardCheck extends StatefulWidget {
   final String label;
   final VoidCallback onTap;
   final String nik;
-   final String notes;
-  final String checkinTime;
+  final String notes;
+  String checkTime;
   final bool isCheckout;
   final int? id;
+  final bool isAssisted;
 
-  const CustomCardCheck({
+  bool isAssistanceChecked;
+
+  CustomCardCheck({
     required this.name,
     required this.label,
     required this.onTap,
     required this.nik,
      this.notes='',
     this.isCheckout = false,
-    required this.checkinTime,
+    this.checkTime ='',
     this.id,
+    this.isAssisted = false,
+    this.isAssistanceChecked = false
 
   });
 
   @override
   _CustomCardCheckState createState() => _CustomCardCheckState();
 }
-
 class _CustomCardCheckState extends State<CustomCardCheck> {
-
   int? id;
-  final TextEditingController _commentController = TextEditingController();
+  bool isChecked = false; // State untuk CheckBox
 
+  void _handleTap() {
+    setState(() {
+      widget.isAssistanceChecked = !widget.isAssistanceChecked;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -285,9 +293,7 @@ class _CustomCardCheckState extends State<CustomCardCheck> {
 
     bool isLateCheckIn = currentTime.isAfter(checkInTimeLimiter);
 
-    Color labelBackgroundColor = isLateCheckIn
-        ? BgaColor.bgaLightRedList
-        : BgaColor.bgaLightGreen100;
+    Color labelBackgroundColor = isLateCheckIn ? BgaColor.bgaLightRedList : BgaColor.bgaLightGreen100;
 
     return Card(
       borderOnForeground: true,
@@ -297,7 +303,13 @@ class _CustomCardCheckState extends State<CustomCardCheck> {
         side: BorderSide(width: 1, color: BgaColor.bgaOrange),
       ),
       child: InkWell(
-        onTap: widget.onTap,
+        onTap: (){
+          _handleTap();
+          widget.onTap;
+        }
+
+
+        ,
         child: Container(
           padding: EdgeInsets.all(16),
           child: Column(
@@ -306,11 +318,11 @@ class _CustomCardCheckState extends State<CustomCardCheck> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
+
                   Text(
                     widget.name,
                     style: BgaTextStyle.titleBoldText,
                   ),
-
                   Text(
                     widget.label,
                     style: BgaTextStyle.titleBoldText,
@@ -323,92 +335,99 @@ class _CustomCardCheckState extends State<CustomCardCheck> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Text(
-                    "NIK : ${widget.nik}",
+                    "NIK  ${widget.nik}",
                     style: BgaTextStyle.titleBoldText,
                   ),
-
-                  Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadiusStyle.bgaroundedBorder15,
-                    ),
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: Container(
-                        color: labelBackgroundColor,
-                        padding: BgaPaddingSize.getBgaPaddingBackgroundColorCheckinTime(),
-                        child: Text(
-                          widget.checkinTime,
-                          style: BgaTextStyle.subtitleText2,
-                        ),
+                  if (widget.label == 'Check In' || widget.label == 'Check Out')
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadiusStyle.bgaroundedBorder15,
                       ),
-                    ),
-                  ),
-
-                ],
-              ),
-              Row(
-
-                children: <Widget>[
-                  if(widget.label == 'Check Out')
-                  Text(
-                    "Notes :",
-                    style: BgaTextStyle.homeCounterPersonText,
-                  ),
-
-
-
-
-                ],
-              ),
-
-              SizedBox(height: BgaSizedboxSize.getSizedBoxMidHeight(),),
-              if (widget.label =='Check Out')
-
-              Container(
-                decoration: BoxDecoration(
-                  border: Border.all(width: 1, color: BgaColor.bgaBlueGray400), // Mengatur border
-                  borderRadius: BorderRadiusStyle.roundedBorder10, // Mengatur border radius
-                ),
-                child: Row(
-                  children: [
-
-                    Expanded(
-                      child: Padding(
-                        padding: BgaPaddingSize.getPaddingBottom8(),
-                        child: TextField(
-                          enabled: false,
-                          onChanged: (value) {
-                            setState(() {
-
-                            });
-                          },
-                          decoration: InputDecoration(
-                            labelText: "${widget.notes}",
-                            labelStyle: BgaTextStyle.searchBarText,
-                            border: InputBorder.none, // Menghilangkan border bawaan TextField
-                            contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 12), // Mengatur padding dalam TextField
+                      child: Align(
+                        alignment: Alignment.center,
+                        child: Container(
+                          color: labelBackgroundColor,
+                          padding:
+                          BgaPaddingSize.getBgaPaddingBackgroundColorCheckinTime(),
+                          child: Text(
+                            widget.checkTime,
+                            style: BgaTextStyle.subtitleText2,
                           ),
                         ),
                       ),
                     ),
 
-                    if (widget.isCheckout)
-                    IconButton(
-                      icon: Icon(Icons.edit),
-                      onPressed: () {
-                        _showCommentDialog();
-                      },
-                    ),
-                  ],
-                ),
+                  if (widget.isAssisted) // Tampilkan CheckBox hanya jika isAssisted true
+                    Theme(
+                      data: Theme.of(context).copyWith(
+                        checkboxTheme: CheckboxThemeData(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadiusStyle.roundedBorder5, // Atur radius sudut sesuai keinginan Anda
+                          ),
+                        ),
+                      ),
+                      child: Checkbox(
+                        value: widget.isAssistanceChecked,
+                        onChanged: (value) {
+                          setState(() {
+                            widget.isAssistanceChecked;
+                          });
+                        },
+                        fillColor: MaterialStateColor.resolveWith((states) => BgaColor.bgaOrange), // Atur warna checklist sesuai keinginan Anda
+                      ),
+                    )
+
+                ],
               ),
-
-
-
+              Row(
+                children: <Widget>[
+                  if (widget.label == 'Check Out')
+                    Text(
+                      "Notes :",
+                      style: BgaTextStyle.homeCounterPersonText,
+                    ),
+                ],
+              ),
+              SizedBox(height: BgaSizedboxSize.getSizedBoxMidHeight()),
+              if (widget.label == 'Check Out')
+                Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                        width: 1, color: BgaColor.bgaBlueGray400),
+                    borderRadius: BorderRadiusStyle.roundedBorder10,
+                  ),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Padding(
+                          padding: BgaPaddingSize.getPaddingBottom8(),
+                          child: TextField(
+                            enabled: false,
+                            onChanged: (value) {
+                              setState(() {});
+                            },
+                            decoration: InputDecoration(
+                              labelText: "${widget.notes}",
+                              labelStyle: BgaTextStyle.searchBarText,
+                              border: InputBorder.none,
+                              contentPadding: EdgeInsets.symmetric(
+                                  vertical: 10, horizontal: 12),
+                            ),
+                          ),
+                        ),
+                      ),
+                      if (widget.isCheckout)
+                        IconButton(
+                          icon: Icon(Icons.edit),
+                          onPressed: () {
+                            _showCommentDialog();
+                          },
+                        ),
+                    ],
+                  ),
+                ),
               SizedBox(height: BgaSizedboxSize.getSizedBoxMidHeight()),
             ],
-
-
           ),
         ),
       ),
@@ -416,18 +435,16 @@ class _CustomCardCheckState extends State<CustomCardCheck> {
   }
 
   void _showCommentDialog() {
-   if(widget.id != null){
-     showDialog(
-       context: context,
-       builder: (BuildContext context) {
-
-         return BgaAddNotes(id: widget.id!, img: Image.asset(imageAlertDefault),);
-
-
-       },
-     );
-   }
+    if (widget.id != null) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return BgaAddNotes(
+            id: widget.id!,
+            img: Image.asset(imageAlertDefault),
+          );
+        },
+      );
+    }
   }
-
-
 }

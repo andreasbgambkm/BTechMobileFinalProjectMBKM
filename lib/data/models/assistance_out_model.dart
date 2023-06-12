@@ -1,25 +1,27 @@
-class AssistanceOut {
-  final String id;
+class AssistanceOutModel {
+   int? id;
   final String assistanceType;
   final String employeeNik;
   final String employeeName;
-  final int employeeAge;
+   int? employeeAge;
   final String employeePosition;
   final String division;
   final String kemandoran;
   final String estate;
+  int isAssistedOut;
   final String assistanceOutTime;
 
-  AssistanceOut({
-    required this.id,
+  AssistanceOutModel({
+    this.id,
     required this.assistanceType,
     required this.employeeNik,
     required this.employeeName,
-    required this.employeeAge,
+    this.employeeAge,
     required this.employeePosition,
     required this.division,
     required this.kemandoran,
     required this.estate,
+    this.isAssistedOut = 0,
     required this.assistanceOutTime,
   });
 
@@ -34,12 +36,13 @@ class AssistanceOut {
       'division': division,
       'kemandoran': kemandoran,
       'estate': estate,
+      'isAssistedOut': isAssistedOut,
       'assistance_out_time': assistanceOutTime,
     };
   }
 
-  factory AssistanceOut.fromMap(Map<String, dynamic> map) {
-    return AssistanceOut(
+  factory AssistanceOutModel.fromMap(Map<String, dynamic> map) {
+    return AssistanceOutModel(
       id: map['id_assistance'],
       assistanceType: map['assistance_type'],
       employeeNik: map['employee_nik'],
@@ -49,6 +52,7 @@ class AssistanceOut {
       division: map['division'],
       kemandoran: map['kemandoran'],
       estate: map['estate'],
+      isAssistedOut: map['isAssistedOut'],
       assistanceOutTime: map['assistance_out_time'],
     );
   }

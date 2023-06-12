@@ -40,15 +40,14 @@ class CheckInCubit extends Cubit<CheckInState> {
     emit(CheckInSuccess(updatedList));
   }
 
-   insertCheckIn(String nik, String name, int isCheckedIn, String checkInTime, int isLated) async {
+   insertCheckIn(String nik, String name, int isCheckedIn, String checkInTime, int isLated, String createdAt) async {
     try {
-      final checkIn = await checkInRepository.insertCheckIn(nik, name, isCheckedIn, checkInTime, isLated);
+      final checkIn = await checkInRepository.insertCheckIn(nik, name, isCheckedIn, checkInTime, isLated, createdAt);
       addCheckIn(checkIn);
     } catch (error) {
       emit(CheckInFailure(error.toString()));
     }
   }
-
 
   void getAllSuccessfulCheckedIn() async {
     emit(CheckInLoading());

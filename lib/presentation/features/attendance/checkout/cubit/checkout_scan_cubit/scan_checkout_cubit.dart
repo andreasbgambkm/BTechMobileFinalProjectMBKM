@@ -49,7 +49,8 @@ class ScanCheckoutCubit extends Cubit<ScanCheckoutState> {
     try {
       final now = DateTime.now();
       final formattedTime = DateFormat('HH:mm').format(now);
-      await employeecheckout.insertCheckOut(nik, name, 1, formattedTime,note!);
+      final createdAt = DateFormat('yyyy-MM-dd').format(now);
+      await employeecheckout.insertCheckOut(nik, name, 1, formattedTime,note!, createdAt);
       emit(ScanCheckoutSuccess(barcodeType, data, employee));
 
 

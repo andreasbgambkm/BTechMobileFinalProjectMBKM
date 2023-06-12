@@ -1,16 +1,18 @@
+import 'package:BTechApp_Final_Project/core/utils/color_pallete.dart';
 import 'package:BTechApp_Final_Project/core/utils/theme/app_decoration.dart';
 import 'package:BTechApp_Final_Project/presentation/widgets/custom_bottomsheet.dart';
+import 'package:BTechApp_Final_Project/presentation/widgets/custom_searchbar.dart';
 import 'package:flutter/material.dart';
-
-class BgaCustomTextFieldAndBottomSheet extends StatelessWidget {
+class BgaCustomTextFieldAndBottomSheet extends StatefulWidget {
   final String title;
   final String description;
   final IconData icon;
   final List<String> itemList;
   final Widget? textField;
+  Widget? searchBarField;
   final Widget? button;
 
-  const BgaCustomTextFieldAndBottomSheet({
+  BgaCustomTextFieldAndBottomSheet({
     Key? key,
     required this.title,
     required this.description,
@@ -18,7 +20,15 @@ class BgaCustomTextFieldAndBottomSheet extends StatelessWidget {
     required this.itemList,
     this.textField,
     this.button,
+    this.searchBarField,
   }) : super(key: key);
+
+  @override
+  _BgaCustomTextFieldAndBottomSheetState createState() => _BgaCustomTextFieldAndBottomSheetState();
+}
+
+class _BgaCustomTextFieldAndBottomSheetState extends State<BgaCustomTextFieldAndBottomSheet> {
+  String selectedValue = '';
 
   @override
   Widget build(BuildContext context) {
@@ -26,11 +36,12 @@ class BgaCustomTextFieldAndBottomSheet extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          title,
-          style: BgaTextStyle.titleBoldText
+          widget.title,
+          style: BgaTextStyle.titleBoldText,
         ),
-        SizedBox(height: BgaSizedboxSize.getSizedBoxMaxHeight(),),
+        SizedBox(height: BgaSizedboxSize.getSizedBoxMaxHeight()),
         Container(
+          height: 55,
           decoration: BoxDecoration(
             borderRadius: BorderRadiusStyle.roundedBorder10,
             border: Border.all(
@@ -47,32 +58,55 @@ class BgaCustomTextFieldAndBottomSheet extends StatelessWidget {
                     showModalBottomSheet(
                       context: context,
                       builder: (BuildContext context) {
-                        return BgaCustomBottomSheet(
-                          textField: textField,
-                          button: button,
-                          children: itemList.map((item) {
-                            return ListTile(
-                              title: Text(item),
-                              onTap: () {
-                                // Handle item selection
-                                Navigator.pop(context);
-                              },
-                            );
-                          }).toList(),
+                        return Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(30.0),
+                              topRight: Radius.circular(30.0),
+                            ),
+                          ),
+                          child: BgaCustomBottomSheet(
+                            searchbarField: Padding(
+                              padding: const EdgeInsets.only(
+                                left: BgaPaddingSize.bgaLeftGpsCardPadding,
+                                right: BgaPaddingSize.bgaRightGpsCardPadding,
+                                top: BgaPaddingSize.bgaTopPadding,
+                              ),
+                              child: BgaCustomSearchBar(onChanged: (String) {}),
+                            ),
+                            button: widget.button,
+                            children: widget.itemList.map((item) {
+                              return ListTile(
+                                title: Text(item),
+                                onTap: () {
+                                  // Handle item selection
+                                  setState(() {
+                                    selectedValue = item;
+                                  });
+                                  Navigator.pop(context);
+                                },
+                              );
+                            }).toList(),
+                          ),
                         );
                       },
                     );
                   },
                   child: Container(
                     padding: BgaPaddingSize.getBgaPaddingSymmHorizontal10(),
-                    child: textField ?? Text(description),
+                    child: Padding(
+                      padding: BgaPaddingSize.getPaddingLeftRight20(),
+                      child: widget.textField ?? Text(selectedValue.isEmpty ? widget.description : selectedValue, style: BgaTextStyle.searchBarText),
+                    ),
                   ),
                 ),
               ),
-              Icon(icon),
+
+              Icon(widget.icon, color: BgaColor.bgaBlack900),
             ],
           ),
         ),
+        SizedBox(height: BgaSizedboxSize.getSizedBoxMaxHeight()),
       ],
     );
   }

@@ -6,6 +6,7 @@ class CheckOutModel {
   String checkoutTime;
   String note;
   int isLated;
+  String? createdAt;
 
   CheckOutModel({
    this.id,
@@ -15,6 +16,7 @@ class CheckOutModel {
     required this.checkoutTime,
     this.note ='',
     this.isLated = 0,
+    this.createdAt,
 
   });
 
@@ -28,6 +30,7 @@ class CheckOutModel {
       'checkoutTime': checkoutTime,
       'note'        : note,
       'isLated'     : isLated,
+      'createdAt'   : createdAt
     };
   }
 
@@ -41,6 +44,7 @@ class CheckOutModel {
       checkoutTime: map['checkoutTime'],
       note: map['note'],
       isLated: map['isLated'],
+      createdAt: map['createdAt']
     );
   }
 

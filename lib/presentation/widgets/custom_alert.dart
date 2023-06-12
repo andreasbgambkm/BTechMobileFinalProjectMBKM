@@ -217,63 +217,6 @@ class _BgaAddNotesState extends State<BgaAddNotes> {
     super.dispose();
   }
 
-  // @override
-  // Widget build(BuildContext context) {
-  //   return Stack(
-  //     children: [
-  //
-  //
-  //       Positioned(
-  //         left: 20,
-  //         right: 20,
-  //         child: CircleAvatar(
-  //           backgroundColor: Colors.transparent,
-  //           radius: 60,
-  //           child: ClipRRect(
-  //             borderRadius: BorderRadius.circular(60),
-  //             child: widget.img,
-  //           ),
-  //         ),
-  //       ),
-  //       AlertDialog(
-  //
-  //         title: Text(
-  //           'Tambahkan Catatan',
-  //           style: BgaTextStyle.titleBoldText,
-  //         ),
-  //         content: TextField(
-  //           controller: _commentController,
-  //           onChanged: (value) {
-  //             setState(() {});
-  //           },
-  //           decoration: InputDecoration(
-  //             labelText: 'Notes',
-  //           ),
-  //         ),
-  //         actions: <Widget>[
-  //           TextButton(
-  //             child: Text('Cancel'),
-  //             onPressed: () {
-  //               Navigator.of(context).pop();
-  //             },
-  //           ),
-  //           TextButton(
-  //             child: Text('Save'),
-  //             onPressed: () {
-  //               final updatedNote = _commentController.text;
-  //               final id = widget.id;
-  //               if (updatedNote.isNotEmpty) {
-  //                 context.read<CheckOutCubit>().updateNote(id, updatedNote);
-  //                 context.read<CheckOutCubit>().refresh();
-  //               }
-  //               Navigator.of(context).pop();
-  //             },
-  //           ),
-  //         ],
-  //       ),
-  //     ],
-  //   );
-  // }
 
   @override
   Widget build(BuildContext context) {

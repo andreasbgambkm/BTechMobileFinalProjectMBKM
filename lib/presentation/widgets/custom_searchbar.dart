@@ -11,24 +11,26 @@ class BgaCustomSearchBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  TextField(
 
-        onChanged: onChanged,
-        decoration: InputDecoration(
-          filled: true,
-          fillColor: BgaColor.bgaSearchBarColor,
-          border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(15.0),
-              borderSide: BorderSide.none
-          ),
-          hintText: searchBarOnEmployeeList,
-          hintStyle: BgaTextStyle.searchBarText,
-          prefixIcon: Icon(FlutterIcons.search_faw5s, size: 20.0,),
-          prefixIconColor: BgaColor.bgaBlackTitleBold,
+    return TextField(
+      onChanged: onChanged,
+      decoration: InputDecoration(
+        filled: true,
+        fillColor: BgaColor.bgaSearchBarColor,
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadiusStyle.bgaroundedBorder15,
+          borderSide: BorderSide(color: BgaColor.bgaOrange),
         ),
-
-
-
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadiusStyle.bgaroundedBorder15,
+          borderSide: BorderSide(color: BgaColor.bgaGray50),    ),
+        hintText: searchBarOnEmployeeList,
+        hintStyle: BgaTextStyle.searchBarText,
+        prefixIcon: Icon(FlutterIcons.search_faw5s, size: 20.0),
+        prefixIconColor: BgaColor.bgaBlackTitleBold,
+      ),
     );
+
+
   }
 }

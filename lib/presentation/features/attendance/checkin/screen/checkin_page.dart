@@ -31,9 +31,27 @@ class _CheckInPageState extends State<CheckInPage> {
     super.initState();
     checkInCubit = context.read<CheckInCubit>();
     checkInCubit.getAllSuccessfulCheckedIn();
+    deleteCheckinIfDifferentDate();
     printCheckIns();
   }
 
+  void deleteCheckinIfDifferentDate() {
+    final now = DateTime.now();
+    final checkinList = checkInCubit.state.checkInList;
+
+    for (int i = 0; i < checkinList.length; i++) {
+      final createdAt = checkinList[i].createdAt;
+      print(createdAt);
+
+      if (createdAt != null) {
+        final createdAtDate = DateTime.parse(createdAt);
+
+        if (createdAtDate.day != now.day) {
+          checkInCubit.deleteAllCheckIns();
+        }
+      }
+    }
+  }
   void printCheckIns() {
     checkInCubit.stream.listen((state) {
       if (state is CheckInSuccess) {
@@ -160,7 +178,7 @@ class _CheckInPageState extends State<CheckInPage> {
                               label: 'Check In',
                               onTap: () {},
                               nik: checkIn.nik,
-                              checkinTime: checkIn.checkInTime,
+                              checkTime: checkIn.checkInTime,
                               isCheckout: false,
                             ),
                           );
